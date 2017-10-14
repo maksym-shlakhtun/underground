@@ -12,7 +12,7 @@ public:
 	Carriage(int _number, int _capacity);
 	Carriage(const Carriage &) = delete;
 	Carriage & operator = (Carriage & _temp) = delete;
-	~Carriage() {};
+	~Carriage() {}
 
 	int getCapacity() const;
 	void setCapacity(int _capacity);
