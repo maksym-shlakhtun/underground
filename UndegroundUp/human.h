@@ -1,4 +1,5 @@
-#pragma once
+#ifndef		HUMAN_H
+#define		HUMAN_H
 
 #include <string>
 
@@ -28,3 +29,5 @@ private:
 	std::string m_endStation;
 	
 };
+
+#endif
