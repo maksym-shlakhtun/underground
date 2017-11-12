@@ -4,8 +4,6 @@
 #include"depot.h"
 #include <algorithm>
 
-Depot::Depot(int _depotNumber)
-	:m_number(_depotNumber), m_trainsCapacity(10), m_carriagesCapacity(10) {};
 
 Depot::Depot(int _depotNumber, int _trainsCapacity, int _carriagesCapacity)
 :m_number(_depotNumber), m_trainsCapacity(_trainsCapacity), m_carriagesCapacity(_carriagesCapacity){
@@ -82,6 +80,15 @@ int  Depot::findTrain(int _trainNumber) const
 	return -1;
 }
 
+void Depot::addTrain(Train * _pTrain)
+{
+	/*int _trainPos = findTrain(_trainNumber);
+	isTrainNotExist( _trainPos);*/
+	isTrainsFullness();
+	
+	m_Trains.push_back(_pTrain);
+}
+
 void Depot::addTrain(int _trainNumber)
 {
 	/*int _trainPos = findTrain(_trainNumber);
@@ -110,9 +117,10 @@ void Depot::removeTrain(Train &_train)
 
 void Depot::removeTrain(int _trainPos)
 {
-	delete m_Trains[_trainPos];
+	//delete m_Trains[_trainPos];
 	m_Trains.erase(m_Trains.begin() + _trainPos);
 }
+
 
 Train * Depot::getTrain(int _pos) const
 {
@@ -127,7 +135,6 @@ int Depot::getNCarriages(int _trainNumber)
 	int _pos = findTrain(_trainNumber);
 	isTrainExist(_pos);
 	return m_Trains[_pos]->getNCarriages();
-
 }
 
 
@@ -147,7 +154,7 @@ bool Depot::hasCarriage(int _carriageNumber) const
 int Depot::findCarriage(int _carriageNumber)const
 {
 	for (int i = 0; i < getCarriagesCount(); i++)
-		if (m_Carriages[i]->getNumber() == _carriageNumber)
+		if (m_Carriages[i]->getCarriageNumber() == _carriageNumber)
 			return i;
 	return -1;
 }
@@ -194,15 +201,14 @@ void Depot::areHasCarriagesIntoTrain(int _trainNumber) const
 }
 
 
-void Depot::hasHumans(int _trainNumber) const
-{
-	int _trainPos = findTrain(_trainNumber);
-	isTrainExist(_trainPos);
-	if (!m_Trains[_trainPos]->isEmpty())
-		throw "Someone already at the train";
-}
+//void Depot::hasHumans(int _trainPos) const
+//{
+//	isTrainExist(_trainPos);
+//	if (!m_Trains[_trainPos]->isEmpty())
+//		throw "Someone already at the train";
+//}
 
-void Depot::findHuman(std::string _humanName) const
+void Depot::findHuman(std::string _humanName) const//не должно біть в депо
 {
 	for (int i = 0; i < getTrainsCount(); i++)
 	{
@@ -232,5 +238,5 @@ void Depot::unfastenCarriage(int _trainNumber, int _carriageNumber)
 		throw "Carriage is not on this train";
 	m_Carriages.push_back(m_Trains[_trainPos]->getCarriage(_carriagePos));
 	m_Trains[_trainPos]->removeCarriage(_carriageNumber);
-	}
+}
 

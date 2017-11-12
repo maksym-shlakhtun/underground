@@ -48,7 +48,7 @@ int Train::findCarriage(Carriage &_carriage) const
 
 	int _nCarriage = getNCarriages();
 	for (int i = 0; i < _nCarriage; i++)
-		if (m_Carriages[i]->getNumber() == (_carriage.getNumber()))
+		if (m_Carriages[i]->getCarriageNumber() == (_carriage.getCarriageNumber()))
 			return i;
 	return -1;
 }
@@ -58,7 +58,7 @@ int Train::findCarriage(int _carriage) const
 
 	int _nCarriage = getNCarriages();
 	for (int i = 0; i < _nCarriage; i++)
-		if (m_Carriages[i]->getNumber() == _carriage)
+		if (m_Carriages[i]->getCarriageNumber() == _carriage)
 			return i;
 	return -1;
 }

@@ -231,24 +231,33 @@ int main() {
 	//undeground->addHumanToTrain("Murchyk", "left");
 	undeground->addHumanToTrain("Murchyk", "right");
 	undeground->addTrainToStation(1, "Paws");
-	//undeground->addHumanToTrain("Pushok", "right", 1);
+	/*try 
+	{
+		undeground->addHumanToTrain("Pushok", "right", 1);
+		assert(false);
+	}
+	catch (std::logic_error &_e)
+	{
+		assert(strcmp(_e.what(), "This operation is impossible"));
+	}*/
+	
 	undeground->addHumanToStation("Pushok", "Paws");
 	undeground->addHumanToTrain("Pushok", "right", 1);
 	undeground->moveHumanFromTrainToStation("Murchyk","Paws");
-//	undeground->removeHuman("Murchyk");
-	undeground->addTrainToStation(1, "Tail");
-	try
-	{
-		undeground->addTrainToDepot(1,1);
 
-		assert(false);
-	}
-	catch (std::logic_error & _e)
-	{
-		assert( strcmp( _e.what(), "" ) );
-	}
+	undeground->addTrainToStation(1, "Tail");
+	//try
+	//{
+	//	undeground->addTrainToDepot(1,1);
+
+	//	assert(false);
+	//}
+	//catch (std::logic_error & _e)
+	//{
+	//	assert( strcmp( _e.what(), "" ) );
+	//}
 	undeground->moveHumanFromTrainToStation("Pushok", "Tail");
-	undeground->removeHuman("Pushok");
+	undeground->removeHumanFromStation("Pushok");
 	undeground->removeTrainFromBranch(1, "Feline");
 	
 	

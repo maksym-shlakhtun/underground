@@ -30,10 +30,6 @@ int Station::getHumansCount() const
 	return m_humans.size();
 }
 
-//Human & Station::getHuman() const
-//{
-//
-//}
 
 Train * Station::getTrain(int _platform) const
 {
@@ -70,6 +66,14 @@ bool Station::hasArrivedLeft() const
 	return m_pLeftTrain != nullptr;
 }
 
+
+bool Station::hasHumanInTrain(int _trainNumber) const
+{
+	if (((getComeLeft() == _trainNumber) && (m_pLeftTrain->isEmpty())) || ((getComeRight()) && (m_pRightTrain->isEmpty())))
+		return true;
+ else return false;
+}
+
 int Station::getComeRight() const
 {
 	if (!hasArrivedRight())
@@ -84,18 +88,18 @@ int Station::getComeLeft() const
 	return m_pLeftTrain->getNumber();
 }
 
-void Station::arrivedRight(Train &_train)
+void Station::arrivedRight(Train *_train)
 {
 	if (m_pRightTrain)
 		throw "Something has arrived in this station";
-	m_pRightTrain = &_train;
+	m_pRightTrain = _train;
 }
 
-void Station::arrivedLeft(Train &_train)
+void Station::arrivedLeft(Train *_train)
 {
 	if (m_pLeftTrain)
 		throw "Something has arrived in this station";
-	m_pLeftTrain = &_train;
+	m_pLeftTrain = _train;
 }
 
 void Station::departureRight()
@@ -140,30 +144,24 @@ void Station::addHuman(Human * _human)
 	m_humans.push_back(_human);
 }
 
-//void Station::addHuman(std::string _humanName)
-//{
-//	isFullnes();
-//	int _humanPos=findHuman(_humanName);
-//	isHumanAtTheStation(_humanPos);
-//	m_humans.push_back();
-//}
-
 
 int Station::removeHuman(Human &_human)
 {
 	int _humanPos = findHuman(_human);
-//	isHumanNotAtTheStation(_humanPos);
 	m_humans.erase(m_humans.begin() + _humanPos);
 	return _humanPos;
 }
 
-int Station::removeHuman(std::string _humanName)
+bool Station::removeHuman(std::string _humanName)
 {
 	int _humanPos = findHuman(_humanName);
-//	isHumanNotAtTheStation(_humanPos);
-	if (_humanPos!=-1)
-	m_humans.erase(m_humans.begin() + _humanPos);
-	return _humanPos;
+	if (_humanPos != -1)
+	{
+		m_humans.erase(m_humans.begin() + _humanPos);
+		return true;
+	}
+	else 
+		return false;
 }
 
 
@@ -174,67 +172,63 @@ int Station::findHumanInTrain(std::string _humanName, int _platform) const
 	else return -1;
 }
 
-int  Station::moveHumanToTrain(std::string _humanName, std::string _direction)
+bool  Station::moveHumanToTrain(std::string _humanName, std::string _direction)
 {
 	int _humanPos = findHuman(_humanName);
 	if (_humanPos == -1)
 	{
-		return -1;
+		return false;
 	}
-	//isHumanNotAtTheStation(_humanPos);
 	int _platform = invalidDirection(_direction);
 	isArrived(_platform);
 	if (_platform == 1)
+	{
 		m_pRightTrain->addHuman(*m_humans[_humanPos]);
-	if (_platform == 2)
+	}
+	else
 		m_pLeftTrain->addHuman(*m_humans[_humanPos]);
 	m_humans.erase(m_humans.begin() + _humanPos);
-	return 1;
+	return true;
 }
 
-int  Station::moveHumanToTrain(std::string _humanName, std::string _direction, int _carriageNumber)
+bool  Station::moveHumanToTrain(std::string _humanName, std::string _direction, int _carriageNumber)
 {
 	int _humanPos = findHuman(_humanName);
-	//isHumanNotAtTheStation(_humanPos);
 	if (_humanPos == -1)
 	{
-		return -1;
+		return false;
 	}
 	int _platform = invalidDirection(_direction);
 	isArrived(_platform);
 	if (_platform == 1)
+	{
 		m_pRightTrain->addHuman(*m_humans[_humanPos], _carriageNumber);
-	if (_platform == 2)
+	}
+	else
 		m_pLeftTrain->addHuman(*m_humans[_humanPos], _carriageNumber);
-	m_humans.erase(m_humans.begin() + _humanPos);
-	return 1;
+		m_humans.erase(m_humans.begin() + _humanPos);
+		return true;
 }
 
-
-int Station::moveHumanFromTrainToStation(std::string _humanName)
+bool Station::moveHumanFromTrainToStation(std::string _humanName)
 {
-	
 	isArrived();
 	Human * _human;
 	if (hasArrivedLeft())
 	{
 		_human = m_pLeftTrain->getAndRemoveHuman(_humanName);
-		if (_human != nullptr)
-		{
-			addHuman(_human);
-			return 1;
-		}
-	
 	}
-	if (hasArrivedRight())
+	else
 	{
 		_human = m_pRightTrain->getAndRemoveHuman(_humanName);
-		if (_human != nullptr)
-		{
-			addHuman(_human);
-			return 1;
-		}
-		return -1;}
-
-	throw "Human is not on Trains";
+	}
+	if (_human != nullptr)
+	{
+		addHuman(_human);
+		return true;
+	}
+	else false;
 }
+			
+
+

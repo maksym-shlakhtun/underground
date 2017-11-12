@@ -25,27 +25,28 @@ public:
 	bool hasTrain(int _trainNumber) const;
 	bool hasArrivedRight() const;
 	bool hasArrivedLeft() const;
+	bool hasHumanInTrain(int _trainNumber) const;
 	int getComeRight() const;
 	int getComeLeft() const;
-	void arrivedRight(Train &_train);
-	void arrivedLeft(Train & _train);
+	void arrivedRight(Train *_train);
+	void arrivedLeft(Train *_train);
 	void departureRight();
 	void departureLeft();
 
 	int findHuman(Human & _human) const;
 	int findHuman(std::string _humanName) const;
 	void addHuman(Human * _human);
-	void addHuman(std::string _humanName);
 	int removeHuman(Human &_human);
-	int removeHuman(std::string _humanName);
+	bool removeHuman(std::string _humanName);
 
 	int findHumanInTrain(std::string _humanName, int _platform) const;
-	int moveHumanToTrain(std::string _humanName, std::string _direction);
-	int moveHumanToTrain(std::string _humanName, std::string _direction, int _carriageNumber);
-	int moveHumanFromTrainToStation(std::string _humanName);
+	bool moveHumanToTrain(std::string _humanName, std::string _direction);
+	bool moveHumanToTrain(std::string _humanName, std::string _direction, int _carriageNumber);
+	bool moveHumanFromTrainToStation(std::string _humanName);
 
 	void isHumanAtTheStation(std::string _humanName) const;
 	void isHumanAtTheStation(int _humanPos) const;
+
 
 private:
 	int m_Capacity;

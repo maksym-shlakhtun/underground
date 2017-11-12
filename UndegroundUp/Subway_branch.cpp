@@ -158,22 +158,31 @@ void SubwayBranch::addTrainToBranch(int _trainNumber, std::string _stationName) 
 	isEndStation(_stationPos);
 	m_pDepot->areHasCarriagesIntoTrain(_trainNumber);
 	int _trainPos = m_pDepot->findTrain(_trainNumber);
-	IsTrainAtTheBranch(_trainNumber);
+	//IsTrainAtTheBranch(_trainNumber);
 
 	if (_stationPos == 0)
-		m_Stations[_stationPos]->arrivedRight(*m_pDepot->getTrain(_trainPos));
-	if (_stationPos == getStationsCount()-1)
-		m_Stations[_stationPos]->arrivedLeft(*m_pDepot->getTrain(_trainPos));
+	{
+		m_Stations[_stationPos]->arrivedRight(m_pDepot->getTrain(_trainPos));
+		if (_stationPos == getStationsCount() - 1)
+		{
+			m_Stations[_stationPos]->arrivedLeft(m_pDepot->getTrain(_trainPos));
+		}
+	}
+	m_pDepot->removeTrain(_trainPos);
 }
 
-void SubwayBranch::removeTrainIntoDepot(int _trainNumber) const///ойойойо
+void SubwayBranch::removeTrainIntoDepot(int _trainNumber) const
 {
 	isDepotNotAttach();
-	m_pDepot->hasHumans(_trainNumber);//автоматически вібрасівать людей на станцию
 	int _stationPos = findTrain(_trainNumber);
 	IsTrainNotAdd(_stationPos);
 	isEndStation(_stationPos);
-	hasRemoveTrainIntoDepot(_trainNumber, _stationPos);
+
+	//m_pDepot->hasHumans(_trainNumber);//or drop people to station
+m_pDepot->addTrain(m_Stations[_stationPos]->getTrain(_trainNumber));	
+hasRemoveTrainIntoDepot(_trainNumber, _stationPos);
+	
+	
 }
 
 void SubwayBranch::hasRemoveTrainIntoDepot(int _trainNumber, int _stationPos) const
@@ -209,12 +218,12 @@ void SubwayBranch::MoveTrain(int _trainNumber, std::string _stationName)
 	if (_platform == 1)
 	{
 		m_Stations[_stationPosBegin]->departureRight();
-		m_Stations[_stationPos]->arrivedRight(*train1);
+		m_Stations[_stationPos]->arrivedRight(train1);
 	}
 	if (_platform == 2)
 	{
 		m_Stations[_stationPosBegin]->departureLeft();
-		m_Stations[_stationPos]->arrivedLeft(*train1);
+		m_Stations[_stationPos]->arrivedLeft(train1);
 	}
 }
 
@@ -306,47 +315,55 @@ int  SubwayBranch::addHumanToStation(Human * _human, std::string _stationName)
 }
 
 
-int SubwayBranch::moveHumanFromTrainToStation(std::string _humanName, std::string _stationName)
+bool SubwayBranch::hasHumansInTrain(int _stationPos, int _trainNumber) const
 {
-	int _temp = -1;
+	return m_Stations[_stationPos]->hasHumanInTrain(_trainNumber);
+}
+
+
+bool SubwayBranch::moveHumanFromTrainToStation(std::string _humanName, std::string _stationName)
+{
 	int _stationPos=findStation(_stationName);
 	wasStationNotAdded(_stationPos);
-	_temp=m_Stations[_stationPos]->moveHumanFromTrainToStation(_humanName);
+	return m_Stations[_stationPos]->moveHumanFromTrainToStation(_humanName);
+}
+
+bool SubwayBranch::moveHumanFromStationToTrain(std::string _humanName, std::string _platform)
+{
+	for (int i = 0; i < getStationsCount(); i++)
+	{
+		if (m_Stations[i]->moveHumanToTrain(_humanName, _platform))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool SubwayBranch::moveHumanFromStationToTrain(std::string _humanName, std::string _platform, int _carriageNumber)
+{
+		for (int i = 0; i < getStationsCount(); i++)
+	{
+			if (m_Stations[i]->moveHumanToTrain(_humanName, _platform, _carriageNumber))
+			{
+				return true;
+			}
+	}
+		return false;
+}
+
+
+bool SubwayBranch::removeHuman(std::string _humanName)
+{
+	bool _temp = false;
+	for (int i = 0; i < getStationsCount(); i++)
+	{
+		if (m_Stations[i]->removeHuman(_humanName))
+			_temp = true;
+	}
+	if (!_temp)
+		throw std::logic_error("Human is at the train now");
 	return _temp;
-}
-int SubwayBranch::moveHumanFromStationToTrain(std::string _humanName, std::string _platform)
-{
-	int _temp=-1;
-	for (int i = 0; i < getStationsCount(); i++)
-	{
-		_temp = m_Stations[i]->moveHumanToTrain(_humanName, _platform);
-		if (_temp == 1)
-			break;
-	}
-		return _temp;
-}
-
-int SubwayBranch::moveHumanFromStationToTrain(std::string _humanName, std::string _platform, int _carriageNumber)
-{
-	int _temp;
-	for (int i = 0; i < getStationsCount(); i++)
-	{
-		_temp=m_Stations[i]->moveHumanToTrain(_humanName, _platform, _carriageNumber);
-		if (_temp == 1)
-			break;
-	}
-	return _temp;
-}
-
-
-int SubwayBranch::removeHuman(std::string _humanName)
-{
-	for (int i = 0; i < getStationsCount(); i++)
-	{
-		if ( m_Stations[i]->removeHuman(_humanName))		
-			return 1;
-	}
-	return -1;
 }
 
 /*------------------------------------------------------------------------------------------------------------------------*/

@@ -25,18 +25,13 @@ int Carriage::getCapacity() const
 	return m_Capacity;
 }
 
-void Carriage::setCapacity(int _capacity)    //?
-{
-	validCapacity(_capacity);
-	m_Capacity = _capacity;
-}
 
 int Carriage::getHumansCount() const
 {
 	return m_passengers.size();
 }
 
-int Carriage::getNumber()
+int Carriage::getCarriageNumber()
 {
 	return m_Number;
 }

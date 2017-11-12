@@ -235,7 +235,7 @@ void Undeground::removeDepot(int _depotNumber)
 void Undeground::wasDepotNotAdded(int _depotPos) const
 {
 	if (_depotPos == -1)
-		throw "A depot with this number has not been added";
+		throw std::logic_error  ("A depot with this number has not been added");
 }
 
 void Undeground:: wasDepotsNotAdded() const
@@ -444,43 +444,34 @@ void Undeground::addHumanToStation(std::string  _humanName, std::string _station
 void Undeground::addHumanToTrain(std::string  _humanName, std::string _platform)
 {
 	hasAddHuman(_humanName);
-	int _temp = -1;
-	for (int i=0; i<getBranchesCount(); i++)
+	for (int i = 0; i<getBranchesCount(); i++)
 	{
-		_temp = m_Branches[i]->moveHumanFromStationToTrain(_humanName, _platform) ;
-		if (_temp == 1)
-			break;
+		if (m_Branches[i]->moveHumanFromStationToTrain(_humanName, _platform))
+			return;
 	}
-	if (_temp == -1)
-		throw "A human can not be added to the train";
+	throw std::logic_error("This operation is impossible");
 }
 
 void Undeground::addHumanToTrain(std::string  _humanName, std::string _platform, int _carriageNumber)
 {
 	hasAddHuman(_humanName);
-	int _temp = -1;
 	for (int i = 0; i<getBranchesCount(); i++)
 	{
-		_temp = m_Branches[i]->moveHumanFromStationToTrain(_humanName, _platform, _carriageNumber) == 1;
-		if (_temp == 1)
-			break;
+		 if (m_Branches[i]->moveHumanFromStationToTrain(_humanName, _platform, _carriageNumber))
+		 return;
 	}
-	if (_temp == -1)
-		throw "A human can not be added to the train";
+		throw std::logic_error("This operation is impossible");
 }
 
 void Undeground::moveHumanFromTrainToStation(std::string _humanName, std::string _stationName) 
 {
 	hasAddHuman(_humanName);
-	int _temp = -1;
 	for (int i = 0; i<getBranchesCount(); i++)
 	{
-		_temp = m_Branches[i]->moveHumanFromTrainToStation(_humanName, _stationName) == 1;
-		if (_temp == 1)
-			break;
+		if (m_Branches[i]->moveHumanFromTrainToStation(_humanName, _stationName))
+			return;
 	}
-	if (_temp == -1)
-		throw "A human can not be added to the train";
+	throw std::logic_error("Human is not on train");
 }
 
 void Undeground::hasAddHuman(std::string  _humanName) const
@@ -489,21 +480,17 @@ void Undeground::hasAddHuman(std::string  _humanName) const
 	wasBranchesNotAdded();
 	wasHumanNotAdded(_humanPos);
 }
-
-void Undeground::removeHuman(std::string  _humanName)
+void Undeground::permanentlyRemoveHuman(std::string _humanName)
 {
 	int _humanPos = findHuman(_humanName);
-	wasHumanNotAdded(_humanPos);
-	for (int i = 0; i < getDepotsCount(); i++)
-	{
-		m_Depots[i]->findHuman(_humanName);
-	}
-	for (int i = 0; i < getBranchesCount(); i++)
-	{
-		if (m_Branches[i]->removeHuman(_humanName)==1)
-			return;
-	}
-	m_Humans.erase(m_Humans.begin()+_humanPos);
+	removeHuman(_humanName, _humanPos);
+	m_Humans.erase(m_Humans.begin() + _humanPos);
+}
+
+void Undeground::removeHumanFromStation(std::string  _humanName)
+{
+	int _humanPos = findHuman(_humanName);
+	removeHuman(_humanName, _humanPos);
 }
 
 
@@ -517,4 +504,16 @@ void Undeground::wasHumanNotAdded(int _humanPos) const
 {
 	if (_humanPos == -1)
 		throw "Human with this name has not been added";
+}
+
+
+void Undeground::removeHuman(std::string  _humanName, int  _humanPos)
+{
+	wasHumanNotAdded(_humanPos);
+
+	for (int i = 0; i < getBranchesCount(); i++)
+	{
+		if (m_Branches[i]->removeHuman(_humanName))
+			break;
+	}
 }

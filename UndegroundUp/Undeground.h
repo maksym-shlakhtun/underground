@@ -83,8 +83,9 @@ public:
 	void addHumanToTrain(std::string  _humanName, std::string _platform);
 	void addHumanToTrain(std::string  _humanName, std::string _platform, int _carriageNumber);
 	void hasAddHuman(std::string  _humanName) const;
+	void permanentlyRemoveHuman(std::string _humanName);
+	void removeHumanFromStation(std::string  _humanName);
 	void moveHumanFromTrainToStation(std::string _humanName, std::string _stationName);
-	void removeHuman(std::string  _humanName);
 
 	void wasHumanAdded(int _humanPos) const;
 	void wasHumanNotAdded(int _humanPos) const;
@@ -94,6 +95,9 @@ private:
 	std::vector<SubwayBranch *> m_Branches;
 	std::vector<Depot *> m_Depots;
 	std::vector<Human *>m_Humans;
+	std::vector<Train *>m_Trains;
+
+	void removeHuman(std::string  _humanName, int _humanPos);
 
 
 

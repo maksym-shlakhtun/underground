@@ -24,7 +24,7 @@ public:
 	Train * getTrain(int _trainNumber, int _stationPosBegin) const;
 
 	/*--------------------------------------------------------------------------------------------------------*/
-	
+
 	bool hasStations() const;
 	bool hasStation(std::string _stationName) const;
 	int findStation(std::string & _station) const;
@@ -33,7 +33,7 @@ public:
 	void addStation(std::string _stationName);
 	void addStation(std::string _stationName, int _capacity);
 	void addStationIntoPos(std::string _stationName, int _capacity, int _pos);
-	void addStationIntoPos(std::string _stationName,  int _pos);
+	void addStationIntoPos(std::string _stationName, int _pos);
 	void addStationIntoPos(Station * _pstation, int _pos);
 	int removeStation(std::string _stationName);
 	int removeStation(Station &_station);
@@ -41,7 +41,7 @@ public:
 	/*--------------------------------------------------------------------------------------------------------*/
 
 	bool hasTrains() const;
-	bool hasTrain(int _trainNumber) const;	
+	bool hasTrain(int _trainNumber) const;
 	void hasRemoveTrainIntoDepot(int _trainNumber, int _stationPos) const;
 	int findTrain(int _number) const;
 
@@ -61,28 +61,28 @@ public:
 	void removeDepot();
 	void removeDepot(int _depotNumber);
 
-	
+
 
 	/*--------------------------------------------------------------------------------------------------------*/
-	
+
 	void findHuman(std::string _humanName) const;
 	int addHumanToStation(Human * _human, std::string _stationName);
-	
-	int moveHumanFromTrainToStation(std::string _humanName, std::string _stationName);
-	int moveHumanFromStationToTrain(std::string _humanName, std::string _platform);
-	int moveHumanFromStationToTrain(std::string _humanName, std::string _platform, int _carriageNumber);
+	bool hasHumansInTrain(int _stationPos, int _trainNumber) const;
+	bool moveHumanFromTrainToStation(std::string _humanName, std::string _stationName);
+	bool moveHumanFromStationToTrain(std::string _humanName, std::string _platform);
+	bool moveHumanFromStationToTrain(std::string _humanName, std::string _platform, int _carriageNumber);
 
-	int removeHuman(std::string _humanName);
+	bool removeHuman(std::string _humanName);
 	/*--------------------------------------------------------------------------------------------------------*/
-	
+
 	void isDepotNotAttach() const;
 	void areStationsNotAdd() const;
-	void  wasStationNotAdded(int _stationPos) const;
+	void wasStationNotAdded(int _stationPos) const;
 	void wasStationAdded(std::string _stationName) const;
 	void IsTrainNotAdd(int _stationPos) const;
 	void IsTrainAtTheBranch(int _trainNumber) const;
 	void isEndStation(int _stationPos) const;
-    void IncorrectMaxStations(int _maxStation) const;
+	void IncorrectMaxStations(int _maxStation) const;
 	void IsStationsAreNotAdded() const;
 	void IsStationsAreAdded() const;
 
@@ -91,10 +91,7 @@ private:
 	int m_maxStations;
 	std::vector<Station *> m_Stations;
 	Depot * m_pDepot;
-
-
 };
-
 
 
 

@@ -15,9 +15,8 @@ public:
 	~Carriage() {}
 
 	int getCapacity() const;
-	void setCapacity(int _capacity);
 	int getHumansCount() const;
-	int getNumber();
+	int getCarriageNumber();
 	Human * getHuman(std::string _humanName) const;
 	Human * getHuman(int _humanPos) const;
 

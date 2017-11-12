@@ -7,8 +7,7 @@ class Carriage;
 class  Depot
 {
 public:
-	Depot(int _depotNumber);
-	Depot::Depot(int _DepotNumber, int _trainCapacity, int _carriageCapacity);
+	Depot::Depot(int _DepotNumber, int _trainCapacity=10, int _carriageCapacity=10);
 	Depot(const Depot&) = delete;
 	Depot & operator = (const Depot &) = delete;
 	~Depot();
@@ -23,6 +22,7 @@ void isTrainsFullness() const;
 bool hasTrain(int _trainNumber) const;
 int findTrain(int _trainNumber) const;
 int findTrain(Train &_train) const;
+void  addTrain(Train * _train);
 void	addTrain(int _trainNumber);
 void	addTrain(int _trainNumber, int _maxCarriages);
 void removeTrain(Train & _train);
