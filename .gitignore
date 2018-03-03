@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+UndegroundUp/Debug/
+
+\.vs/UndegroundUp/v14/
+
+*.db
+
+*.pdb
+
+Debug/\.vs/UndegroundUp/v14/
+
+Debug/
