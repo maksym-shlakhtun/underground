@@ -31,14 +31,12 @@
 *.out
 *.app
 
-UndegroundUp/Debug/
-
-\.vs/UndegroundUp/v14/
-
+#MS Visual Studio generated files
 *.db
 
 *.pdb
+*.suo
 
-Debug/\.vs/UndegroundUp/v14/
-
+#Binaries and generated info
 Debug/
+Release/
