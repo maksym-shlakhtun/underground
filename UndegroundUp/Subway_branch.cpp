@@ -319,7 +319,7 @@ bool SubwayBranch::moveHumanFromTrainToStation(const std::string & _humanName, c
 	wasStationNotAdded(_stationPos);
 	return m_Stations[_stationPos]->moveHumanFromTrainToStation(_humanName);
 }
-///////////////////////////////////////////
+
 bool SubwayBranch::moveHumanFromStationToTrain(const std::string & _humanName,const std::string & _stationName)
 {
 	int _stationEnd = findStation(_stationName);

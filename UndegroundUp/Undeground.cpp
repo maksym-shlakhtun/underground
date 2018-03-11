@@ -451,7 +451,7 @@ void Undeground::addHumanToStation(const std::string &  _humanName, const std::s
 	}
 		m_Branches[0]->wasStationNotAdded(_temp);
 }
-///////////////////////////////////
+
 void Undeground::addHumanToTrain(const std::string &  _humanName, const std::string & _stationName)
 {
 	hasAddHuman(_humanName);

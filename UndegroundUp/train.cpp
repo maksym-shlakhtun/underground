@@ -128,7 +128,9 @@ void Train::addHuman(Human &_human)
 {
 	hasCarriages();
 	if (findHuman(_human) != -1)
+
 		throw std::logic_error("Human is at tne train now");
+
 	if (!hasEmptySeats())
 		throw std::logic_error("The train is full");
 		for (int i = 0; i < getNCarriages(); i++)
@@ -141,7 +143,8 @@ void Train::addHuman(Human &_human, int _carriage)
 	hasCarriages();
 	NonexistentCarriageNumber(_carriage);
 		if (findHuman(_human) != -1)
-		throw std::logic_error("Human is at tne train now");
+
+			throw std::logic_error("Human is at tne train now");
 
 	if (m_Carriages[_carriage - 1]->addHuman(_human)==-1)
 		throw std::logic_error("The carriage is full");
