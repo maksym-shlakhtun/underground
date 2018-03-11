@@ -6,18 +6,14 @@
 #include "train.h"
 #include "human.h"
 
-SubwayBranch::SubwayBranch(std::string _Name)
-:m_Name(_Name), m_maxStations(10)
-{}
-
-SubwayBranch::SubwayBranch(std::string _Name, int _maxStations)
+SubwayBranch::SubwayBranch(const std::string & _Name, int _maxStations)
 	: m_Name(_Name), m_maxStations(_maxStations)
 {
 	IncorrectMaxStations(m_maxStations);
 }
 
 
-std::string SubwayBranch::getName() const
+const std::string & SubwayBranch::getName() const
 {
 	return m_Name;
 }
@@ -35,7 +31,7 @@ int SubwayBranch::getStationsCount() const
 Station & SubwayBranch::getStation(int _pos) const
 {
 	if (_pos <0 || _pos>getStationsCount())
-		throw "Incorrect number of station";
+		throw  std::logic_error("There is incorrect number of station");
 	return *m_Stations.at(_pos-1);
 }
 
@@ -48,21 +44,18 @@ SubwayBranch::~SubwayBranch()
 
 Train * SubwayBranch::getTrain(int _platform, int _stationPosBegin) const
 {
-
-		return m_Stations[_stationPosBegin]->getTrain(_platform);
+	return m_Stations[_stationPosBegin]->getTrain(_platform);
 }
 
 /*--------------------------------------------------------------------------------------------------------*/
 
 bool SubwayBranch::hasStations() const
 {
-	if (getStationsCount() > 0)
-		return true;
-	else return false;
+	return getStationsCount() > 0;
 }
 
 
-int SubwayBranch ::findStation(std::string & _station) const
+int SubwayBranch ::findStation(const std::string & _station) const
 {
 	for (int i = 0; i < getStationsCount(); i++)
 		if (m_Stations[i]->getName() == _station)
@@ -77,28 +70,28 @@ void SubwayBranch::addStation(Station *_pstation)
 	m_Stations.push_back(_pstation);
 }
 
-void SubwayBranch::addStation(std::string _stationName)
+void SubwayBranch::addStation(const std::string & _stationName)
 {
 	wasStationAdded(_stationName);
 	Station *station1 = new Station(_stationName);
 	m_Stations.push_back(station1);
 }
 
-void SubwayBranch::addStation(std::string _stationName, int _capacity)
+void SubwayBranch::addStation(const std::string & _stationName, int _capacity)
 {
 	wasStationAdded(_stationName);
 	Station *station1 = new Station(_stationName, _capacity);
 	m_Stations.push_back(station1);
 }
 
-void SubwayBranch::addStationIntoPos(std::string _stationName, int _capacity, int _pos)
+void SubwayBranch::addStationIntoPos(const std::string & _stationName, int _capacity, int _pos)
 {
 	wasStationAdded(_stationName);
 	Station *station1 = new Station(_stationName, _capacity);
 	m_Stations.insert(m_Stations.begin() + _pos - 1, station1);
 }
 
-void SubwayBranch::addStationIntoPos(std::string _stationName,  int _pos)
+void SubwayBranch::addStationIntoPos(const std::string & _stationName,  int _pos)
 {
 	wasStationAdded(_stationName);
 	Station *station1 = new Station(_stationName);
@@ -120,13 +113,13 @@ int SubwayBranch::removeStation(Station &_station)
 	return 1;
 }
 
-int SubwayBranch::removeStation(std::string _stationName)
+int SubwayBranch::removeStation(const std::string & _stationName)
 {
 	int _stationPos = findStation(_stationName);
 	if (_stationPos == -1)
 		return _stationPos;
 	if ((m_Stations[_stationPos]->hasTrains()) || (m_Stations[_stationPos]->hasArrivedLeft()) || (m_Stations[_stationPos]->hasArrivedRight()))
-		throw std::logic_error("The station is being used at the moment");
+		throw std::logic_error("The station is using at the moment");
 		m_Stations.erase(m_Stations.begin() + _stationPos);
 	return 1;
 }
@@ -149,7 +142,7 @@ bool SubwayBranch::hasTrain(int _trainNumber) const
 	return false;
 }
 
-void SubwayBranch::addTrainToBranch(int _trainNumber, std::string _stationName) const
+void SubwayBranch::addTrainToBranch(int _trainNumber, const std::string & _stationName) const
 { 
 	isDepotNotAttach();
 	areStationsNotAdd();
@@ -190,13 +183,13 @@ void SubwayBranch::hasRemoveTrainIntoDepot(int _trainNumber, int _stationPos) co
 	if (_stationPos == 0)
 	{
 		if (m_Stations[_stationPos]->getComeLeft() != _trainNumber)
-			throw "Trainwas arrived into another platform";
+			throw std::logic_error("Train has been at another platform");
 		m_Stations[_stationPos]->departureLeft();
 	}
 	if (_stationPos == getStationsCount() - 1)
 	{
 		if (m_Stations[_stationPos]->getComeRight() != _trainNumber)
-			throw "Trainwas arrived into another platform";
+			throw std::logic_error("Train has been at another platform");
 		m_Stations[_stationPos]->departureRight();
 	}
 }
@@ -209,7 +202,7 @@ int SubwayBranch::findTrain(int _number) const
 	return -1;
 }
 
-void SubwayBranch::MoveTrain(int _trainNumber, std::string _stationName)
+void SubwayBranch::MoveTrain(int _trainNumber, const std::string & _stationName)
 {
 	int _stationPos = findStation(_stationName);
 	int _stationPosBegin=findTrain(_trainNumber);
@@ -220,7 +213,7 @@ void SubwayBranch::MoveTrain(int _trainNumber, std::string _stationName)
 		m_Stations[_stationPosBegin]->departureRight();
 		m_Stations[_stationPos]->arrivedRight(train1);
 	}
-	if (_platform == 2)
+	else
 	{
 		m_Stations[_stationPosBegin]->departureLeft();
 		m_Stations[_stationPos]->arrivedLeft(train1);
@@ -235,16 +228,16 @@ int SubwayBranch::IncorrectStation(int _trainNumber, int _stationPos,  int _stat
 	if (_stationPos - _stationPosBegin == 1)
 	{
 		if (!m_Stations[_stationPosBegin]->hasArrivedRight())
-			throw "Train is not arrived to this station";
+			throw std::logic_error("Train isn't at the station now");
 		return 1;
 	}
 	if (_stationPosBegin - _stationPos == 1)
 	{
 		if (!m_Stations[_stationPosBegin]->hasArrivedLeft())
-			throw "Train is not arrived to this station";
+			throw "Train isn't at the station now";
 		return 2;
 	}
-	throw "Train can not move to this station";
+	throw std::logic_error("Train can not move to this station");
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
 
@@ -263,20 +256,20 @@ bool SubwayBranch::hasDepot() const
 void SubwayBranch::hasDepot(int _depotNumber) const
 {
 	if (m_pDepot->getNumber() != _depotNumber)
-		throw "The depot is not attached to a branch";
+		throw std::logic_error("Depot hasn't attached to the branch");
 }
 
 void SubwayBranch::addDepot(Depot & _depot)
 {
 	if (hasDepot())
-		throw "Depot is already add to brunch";
+		throw std::logic_error("Depot has already added to brunch");
 	m_pDepot = &_depot;
 }
 
 void SubwayBranch::removeDepot()
 {
 	if (hasTrains())
-		throw "The train from the depot is still on the branch";
+		throw std::logic_error("Train from this depot is at the branch now");
 	isDepotNotAttach();
 	m_pDepot = nullptr;
 }
@@ -285,28 +278,27 @@ void SubwayBranch::removeDepot(int _depotNumber)
 {
 	hasDepot(_depotNumber);
 		if (hasTrains())
-			throw "The train from the depot is still on the branch";
+			throw std::logic_error("Train from this depot is at the branch now");
 		isDepotNotAttach();
 		m_pDepot = nullptr;
 }
 
 /*------------------------------------------------------------------------------------------------------------------------*/
 
-void SubwayBranch::findHuman(std::string _humanName) const
+void SubwayBranch::findHuman(const std::string &_humanName) const
 {
 	for (int i = 0; i < getStationsCount(); i++)
 	{
 		if ((m_Stations[i]->findHuman(_humanName) != -1) || (m_Stations[i]->findHumanInTrain(_humanName, 1) == 1) || (m_Stations[i]->findHumanInTrain(_humanName, 2) == 1))
-			throw "Human is already at the branch";
+			throw std::logic_error( "Human has been already at the branch");
 	}
 }
 
 
-int  SubwayBranch::addHumanToStation(Human * _human, std::string _stationName)
+int  SubwayBranch::addHumanToStation(Human * _human, const std::string & _stationName)
 {
 	int _stationPos = findStation(_stationName);
 	if (_stationPos != -1)
-		//wasStationNotAdded(_stationPos);
 	{
 		m_Stations[_stationPos]->addHuman(_human);
 		return 1;
@@ -321,39 +313,61 @@ bool SubwayBranch::hasHumansInTrain(int _stationPos, int _trainNumber) const
 }
 
 
-bool SubwayBranch::moveHumanFromTrainToStation(std::string _humanName, std::string _stationName)
+bool SubwayBranch::moveHumanFromTrainToStation(const std::string & _humanName, const std::string & _stationName)
 {
 	int _stationPos=findStation(_stationName);
 	wasStationNotAdded(_stationPos);
 	return m_Stations[_stationPos]->moveHumanFromTrainToStation(_humanName);
 }
-
-bool SubwayBranch::moveHumanFromStationToTrain(std::string _humanName, std::string _platform)
+///////////////////////////////////////////
+bool SubwayBranch::moveHumanFromStationToTrain(const std::string & _humanName,const std::string & _stationName)
 {
+	int _stationEnd = findStation(_stationName);
+	if (_stationEnd == -1)
+		return false;
 	for (int i = 0; i < getStationsCount(); i++)
 	{
-		if (m_Stations[i]->moveHumanToTrain(_humanName, _platform))
-		{
-			return true;
-		}
+		if (
+				(
+						(_stationEnd < i)
+					&& (m_Stations[i]->moveHumanToTrain(_humanName, 2))
+				)
+				||
+				(
+						(_stationEnd > i)
+					&& (m_Stations[i]->moveHumanToTrain(_humanName, 1))
+				)
+			)
+				return true;
 	}
 	return false;
 }
 
-bool SubwayBranch::moveHumanFromStationToTrain(std::string _humanName, std::string _platform, int _carriageNumber)
+bool SubwayBranch::moveHumanFromStationToTrain(const std::string & _humanName, const std::string & _stationName, int _carriageNumber)
 {
-		for (int i = 0; i < getStationsCount(); i++)
-	{
-			if (m_Stations[i]->moveHumanToTrain(_humanName, _platform, _carriageNumber))
-			{
-				return true;
-			}
-	}
+	int _stationEnd = findStation(_stationName);
+	if (_stationEnd == -1)
 		return false;
+	for (int i = 0; i < getStationsCount(); i++)
+	{
+		if (
+			(
+			(_stationEnd < i)
+				&& (m_Stations[i]->moveHumanToTrain(_humanName, 2, _carriageNumber))
+				)
+			||
+			(
+			(_stationEnd > i)
+				&& (m_Stations[i]->moveHumanToTrain(_humanName, 1, _carriageNumber))
+				)
+			)
+			return true;
+	}
+	return false;
 }
 
 
-bool SubwayBranch::removeHuman(std::string _humanName)
+bool SubwayBranch::removeHuman(const std::string & _humanName)
 {
 	bool _temp = false;
 	for (int i = 0; i < getStationsCount(); i++)
@@ -362,7 +376,7 @@ bool SubwayBranch::removeHuman(std::string _humanName)
 			_temp = true;
 	}
 	if (!_temp)
-		throw std::logic_error("Human is at the train now");
+		throw std::logic_error("Human is situating at the train now");
 	return _temp;
 }
 

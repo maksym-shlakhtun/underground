@@ -229,7 +229,7 @@ int main() {
 	//undeground->addHumanToStation("Murchyk", "Mmr");
 	//undeground->addHumanToStation("Murchyk", "Mrr");
 	//undeground->addHumanToTrain("Murchyk", "left");
-	undeground->addHumanToTrain("Murchyk", "right");
+	undeground->addHumanToTrain("Murchyk", "Paws");
 	undeground->addTrainToStation(1, "Paws");
 	/*try 
 	{
@@ -242,7 +242,7 @@ int main() {
 	}*/
 	
 	undeground->addHumanToStation("Pushok", "Paws");
-	undeground->addHumanToTrain("Pushok", "right", 1);
+	undeground->addHumanToTrain("Pushok", "Tail", 1);
 	undeground->moveHumanFromTrainToStation("Murchyk","Paws");
 
 	undeground->addTrainToStation(1, "Tail");

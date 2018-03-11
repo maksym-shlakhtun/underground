@@ -8,13 +8,13 @@ class Human;
 class Station
 {
 public:
-	Station(std::string _Name);
-	Station( std::string _Name, int _Capacity);
+	
+	Station(const std::string & _name, int _capacity=10);
 	Station(const Station & _temp) = delete;
-	Station & operator = (const Station & _temp) = delete;
-	~Station() {};
+	const Station & operator = (const Station & _temp) = delete;
+	~Station() {}
 
-	std::string getName() const;
+	const std::string & getName() const;
 	int getCapacity() const;
 	int getHumansCount() const;
 	Human & getHuman() const;
@@ -33,18 +33,18 @@ public:
 	void departureRight();
 	void departureLeft();
 
-	int findHuman(Human & _human) const;
-	int findHuman(std::string _humanName) const;
+	int findHuman(const Human & _human) const;
+	int findHuman(const std::string & _humanName) const;
 	void addHuman(Human * _human);
 	int removeHuman(Human &_human);
-	bool removeHuman(std::string _humanName);
+	bool removeHuman(const std::string &_humanName);
 
-	int findHumanInTrain(std::string _humanName, int _platform) const;
-	bool moveHumanToTrain(std::string _humanName, std::string _direction);
-	bool moveHumanToTrain(std::string _humanName, std::string _direction, int _carriageNumber);
-	bool moveHumanFromTrainToStation(std::string _humanName);
+	int findHumanInTrain(const std::string & _humanName, int _platform) const;
+	bool moveHumanToTrain(const std::string & _humanName, const int _platform);
+	bool moveHumanToTrain(const std::string & _humanName, const int _platform, int _carriageNumber);
+	bool moveHumanFromTrainToStation(const std::string & _humanName);
 
-	void isHumanAtTheStation(std::string _humanName) const;
+	void isHumanAtTheStation(const std::string & _humanName) const;
 	void isHumanAtTheStation(int _humanPos) const;
 
 
@@ -56,7 +56,6 @@ private:
 	std::vector <Human *> m_humans;
 
 	void validCapacity(int _temp);
-	int  invalidDirection(std::string _dsrection) const;
 	void isArrived() const;
 	void isArrived(int _direction) const;
 	void isFullnes() const;
@@ -64,65 +63,56 @@ private:
 
 	
 	void isHumanNotAtTheStation(int _humanPos) const;
-	void isHumanAtTheTrain(std::string _humanName) const;
+	void isHumanAtTheTrain(const std::string & _humanName) const;
 	//	int isAddHumanToTrain(std::string _humanName, std::string _direction) const;
 };
 
 inline void Station::validCapacity(int _temp)
 {
 	if (m_Capacity <= 0 || m_Capacity > 100)
-		throw "Incorrect capacity";
-}
-
-inline int  Station::invalidDirection(std::string _direction) const
-{
-	if (_direction == "Right" || _direction == "right"||_direction == "platform1")
-		return 1;
-	if (_direction == "Left"|| _direction == "left"||_direction == "platform2")
-		return 2;
-	throw "Invalid direction";
+		throw std::logic_error("Incorrect capacity");
 }
 
 inline void Station::isArrived() const
 {
 	if (!hasTrains())
-		throw "Station has no trains";
+		throw std::logic_error("Station hasn't any trains");
 }
 
 inline void Station::isFullnes() const
 {
 	if ((getHumansCount() + 1) >= m_Capacity)
-		throw "Station is full";
+		throw std::logic_error("Station is full");
 }
 
 inline void Station::isArrived(int _direction) const
 {
 	if ((_direction == 1 && !hasArrivedRight()) || (_direction == 2 && !hasArrivedLeft()))
-		throw "Train is not arrived to the station";
+		throw std::logic_error("Train hasn't arrived to the station");
 }
 
 inline void Station::isHumanAtTheStation(Human & _human) const
 {
 	if (findHuman(_human) != -1)
-		throw "Human is already at the station";
+		throw std::logic_error("Human is at the station now");
 }
 
-inline void Station::isHumanAtTheStation(std::string _humanName) const
+inline void Station::isHumanAtTheStation(const std::string & _humanName) const
 {
 	if (findHuman(_humanName) != -1)
-		throw "Human is already at the station";
+		throw std::logic_error("Human is at the station now");
 }
 
 inline void Station::isHumanAtTheStation(int _humanPos) const
 {
 	if (_humanPos != -1)
-		throw "Human is already at the station";
+		throw std::logic_error("Human is at the station");
 }
 
 inline void Station::isHumanNotAtTheStation(int _humanPos) const
 {
 	if (_humanPos == -1)
-		throw "Human is not at the station";
+		throw std::logic_error("Human isn't at the station");
 }
 
 
