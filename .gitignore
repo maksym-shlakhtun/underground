@@ -40,3 +40,5 @@
 #Binaries and generated info
 Debug/
 Release/
+
+*.sdf

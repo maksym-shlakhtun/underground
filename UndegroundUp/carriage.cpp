@@ -4,19 +4,12 @@
 
 
 
-Carriage::Carriage(int _number)
-	:m_Capacity(50), m_Number(_number)
-{
-	if (_number < 0)
-		throw "Incorrect number";
-}
-
-Carriage::Carriage( int _number, int _capacity)
+Carriage::Carriage(int _number, int _capacity)
 	: m_Capacity(_capacity), m_Number(_number)
 {
 	validCapacity(_capacity);
 	if (_number < 0)
-		throw "Incorrect number";
+		throw std::logic_error("Incorrect number");
 }
 
 
@@ -36,7 +29,7 @@ int Carriage::getCarriageNumber()
 	return m_Number;
 }
 
-Human * Carriage::getHuman(std::string _humanName) const
+Human * Carriage::getHuman(const std::string & _humanName) const
 {
 	int _humanPos = findHuman(_humanName);
 	if (_humanPos == -1)
@@ -90,11 +83,9 @@ Human * Carriage::getAndRemoveHuman(int _humanPos)
 	return _human;
 }
 
-int Carriage::Follness() const
+bool Carriage::Follness() const
 {
-	if (getHumansCount() + 1 >= m_Capacity)
-		return -1;
-	else return 1;
+	return (getHumansCount() + 1 < m_Capacity);
 }
 
 int  Carriage::nEmptySeats() const

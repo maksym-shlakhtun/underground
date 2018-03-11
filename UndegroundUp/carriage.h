@@ -8,8 +8,7 @@ class Carriage
 {
 public:
 
-	Carriage(int _number);
-	Carriage(int _number, int _capacity);
+	Carriage(int _number, int _capacity=10);
 	Carriage(const Carriage &) = delete;
 	Carriage & operator = (Carriage & _temp) = delete;
 	~Carriage() {}
@@ -17,7 +16,7 @@ public:
 	int getCapacity() const;
 	int getHumansCount() const;
 	int getCarriageNumber();
-	Human * getHuman(std::string _humanName) const;
+	Human * getHuman(const std::string &_humanName) const;
 	Human * getHuman(int _humanPos) const;
 
 	int addHuman(Human &_passenger);
@@ -25,7 +24,7 @@ public:
 	int findHuman(Human & _human) const;
 	int findHuman(std::string _humanName) const;
 	
-	int Follness() const;
+	bool Follness() const;
 	int  nEmptySeats() const;
 
 
@@ -42,11 +41,11 @@ private:
 inline void Carriage::validCapacity(int _temp) const
 {
 	if (m_Capacity <= 0 || m_Capacity > 100)
-		throw "Incorrect capacity";
+		throw std::logic_error("Incorrect capacity");
 }
 
 inline void Carriage::isHumanInCarriage(int _humanPos) const
 {
 	if (_humanPos == -1)
-		throw "Carriage has not human";
+		throw std::logic_error("There are no human at the carriage");
 }

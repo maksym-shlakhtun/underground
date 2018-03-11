@@ -51,7 +51,6 @@ public:
 	int IncorrectStation(int _trainNumber, int _stationPos, int _stationPosBegin) const;
 
 	/*--------------------------------------------------------------------------------------------------------*/
-	Depot getDepot() const;
 	int getDepotNumber() const;
 	bool hasDepot() const;
 	void hasDepot(int _depotNumber) const;
@@ -77,7 +76,7 @@ public:
 	void isDepotNotAttach() const;
 	void areStationsNotAdd() const;
 	void wasStationNotAdded(int _stationPos) const;
-	void wasStationAdded(std::string _stationName) const;
+	void wasStationAdded(const std::string & _stationName) const;
 	void IsTrainNotAdd(int _stationPos) const;
 	void IsTrainAtTheBranch(int _trainNumber) const;
 	void isEndStation(int _stationPos) const;
@@ -97,54 +96,54 @@ private:
 inline void SubwayBranch::isDepotNotAttach() const
 {
 	if (!hasDepot())
-		throw"Depot was not add to brunch";
+		throw std::logic_error("Depot hasn't been added to brunch");
 }
 inline void SubwayBranch::areStationsNotAdd() const
 {
 	if (!hasStations())
-		throw "Subway branch dont have any station";
+		throw std::logic_error("Subway branch doesnt have any station");
 }
-inline void SubwayBranch:: wasStationAdded(std::string _stationName) const
+inline void SubwayBranch:: wasStationAdded(const std::string & _stationName) const
 {
 	if (findStation(_stationName )!= -1)
-		throw"The branch already includes this station";
+		throw std::logic_error("The branch have already included this station");
 }
 inline void SubwayBranch:: wasStationNotAdded(int _stationPos) const
 {
 	if (_stationPos == -1)
-		throw"Subway branches does not include this station";
+		throw std::logic_error("Subway branches arent' including this station now ");
 }
 inline void SubwayBranch::IsTrainNotAdd(int _stationPos) const
 {
 	if (_stationPos == -1)
-		throw "Train is not add to brunch";
+		throw std::logic_error("Train hasn't been added to brunchh");
 }
 
 inline void SubwayBranch::IsTrainAtTheBranch(int _trainNumber) const
 {
 if (findTrain(_trainNumber) != -1)
-		throw "Train is already at the branch";
+		throw std::logic_error("Train have already been at the branch");
 }
 
 inline void SubwayBranch::isEndStation(int _stationPos) const
 {
 if (_stationPos != 0 && _stationPos != getStationsCount() - 1)
-		throw "Thia station is not final";
+		throw std::logic_error("This station isn't final sation");
 }
 
 inline void SubwayBranch::IncorrectMaxStations(int _maxStations) const
 {
 	if (_maxStations < 0 || _maxStations>10)
-		throw "Incorrect maximum number of stations";
+		throw std::logic_error("Incorrect maximum number of stations");
 }
 
 inline void SubwayBranch::IsStationsNotAdded() const
 {
 	if (getStationsCount() == 0)
-		throw "Stations are not added to the branch";
+		throw std::logic_error("There are no any stations at  the branch");
 }
 
 inline void SubwayBranch::IsStationsAdded() const
 {
-	throw "There are stations on the branch";
+	throw std::logic_error("There are stations on the branch");
 }
