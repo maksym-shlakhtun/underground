@@ -66,10 +66,10 @@ int Train::findCarriage(int _carriage) const
 void Train::addCarriage(Carriage *_carriage) 
 {
 	if (getNCarriages() + 1 > m_maxCarriages)
-		throw "The train is full";
+		throw std::logic_error("The train is full");
 	if (findCarriage(*_carriage) != -1)
-		throw "The carriage already attached to the train";
-		m_Carriages.push_back(_carriage);
+		throw std::logic_error("The carriage has already attached to the train");
+	m_Carriages.push_back(_carriage);
 }
 
 void Train::removeCarriage(int _number)
@@ -77,9 +77,9 @@ void Train::removeCarriage(int _number)
 	hasCarriages();
 	int _pos = findCarriage(_number);
 	if (findCarriage(_number) == -1)
-		throw "The cariage dont attached to the train";
+		throw std::logic_error("The cariage hasn't attached to the train");
 	if (m_Carriages[_pos]->getHumansCount() != 0)
-		throw "There are people in the carriage";
+		throw std::logic_error("There are people in the carriage");
 	m_Carriages.erase(m_Carriages.begin() + _pos);
 }
 
@@ -91,9 +91,7 @@ void  Train::hasCarriages() const
 
 bool Train::isTrainFullness()  const
 {
-	if (getNCarriages() != m_maxCarriages)
-		return true;
-	return false;
+	return getNCarriages() != m_maxCarriages;
 }
 
 bool Train::hasEmptySeats()
@@ -107,9 +105,7 @@ bool Train::hasEmptySeats()
 
 bool Train::isEmpty() const
 {
-	if (getHumansCount() == 0)
-		return true;
-	else return false;
+	return getHumansCount() == 0;
 }
 
 int Train::findHuman(Human &_human) const
@@ -120,7 +116,7 @@ int Train::findHuman(Human &_human) const
 	return -1;
 }
 
-int Train::findHuman(std::string  _humanName) const
+int Train::findHuman(const std::string & _humanName) const
 {
 	for (int i = 0; i < getNCarriages(); i++)
 		if (m_Carriages[i]->findHuman(_humanName) != -1)
@@ -132,26 +128,26 @@ void Train::addHuman(Human &_human)
 {
 	hasCarriages();
 	if (findHuman(_human) != -1)
-		throw "Human always in tne train";
+		throw std::logic_error("Human is at tne train now");
 	if (!hasEmptySeats())
-		throw"The train is full";
+		throw std::logic_error("The train is full");
 		for (int i = 0; i < getNCarriages(); i++)
 			if (m_Carriages[i]->addHuman(_human) == 1)
 				break;
-	}
+}
 
 void Train::addHuman(Human &_human, int _carriage) 
 {	
 	hasCarriages();
 	NonexistentCarriageNumber(_carriage);
 		if (findHuman(_human) != -1)
-		throw "Human always in tne train";
+		throw std::logic_error("Human is at tne train now");
 
 	if (m_Carriages[_carriage - 1]->addHuman(_human)==-1)
-		throw "The carriage is full";
+		throw std::logic_error("The carriage is full");
 }
 
-Human * Train::getAndRemoveHuman(std::string _humanName)
+Human * Train::getAndRemoveHuman(const std::string & _humanName)
 {
 	/*int i = findHuman(_humanName);
 	if (i == -1)
@@ -168,7 +164,7 @@ Human * Train::getAndRemoveHuman(std::string _humanName)
 
 }
 
-Human * Train::getHuman(std::string _humanName) const
+Human * Train::getHuman(const std::string & _humanName) const
 {
 	int _humanPos= 0;
 	for (int i = 0; i < getNCarriages() - 1; i++)
@@ -177,9 +173,6 @@ Human * Train::getHuman(std::string _humanName) const
 		if (_humanPos != -1)
 			m_Carriages[i]->getHuman(_humanPos);
 	}
-		return nullptr;
+	return nullptr;
 }
-
-
-
 

@@ -29,12 +29,12 @@ public:
 	
 	bool isEmpty() const;
 	int findHuman(Human &_human) const;
-	int findHuman(std::string  _humanName) const;
+	int findHuman(const std::string & _humanName) const;
 	void addHuman(Human &_human);
 	void addHuman(Human &_human, int  _carriage);
-	Human * getAndRemoveHuman(std::string _humanName);
+	Human * getAndRemoveHuman(const std::string & _humanName);
 	//int getAddedpassengers() const;
-	Human * getHuman(std::string _humanName) const;
+	Human * getHuman(const std::string & _humanName) const;
 
 	
 
@@ -53,16 +53,16 @@ private:
 inline void Train::incorrectNumber(int _number) const
 {
 	if (_number < 0)
-		throw "Incorrect number ";
+		throw std::logic_error("Incorrect number ");
 }
 
 inline void Train::incorrectMaxCarriages(int _maxCarriages) const
 {
 	if (_maxCarriages <= 0 || _maxCarriages > 5)
-		throw "Incorrect number of carriages";
+		throw std::logic_error("Incorrect number of carriages");
 }
 inline void Train::NonexistentCarriageNumber(int _number) const
 {
 	if (_number <= 0 || _number > getNCarriages())
-		throw "Incorrect nubmer of carriage";
+		throw std::logic_error("Incorrect nubmer of carriage");
 }

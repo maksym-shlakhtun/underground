@@ -141,14 +141,12 @@ int Depot::getNCarriages(int _trainNumber)
 void Depot::isCarriagesFullness() const
 {
 	if (getCarriagesCount() + 1 > getCarriagesCapacity())
-		throw "Depo already full";
+		throw std::logic_error("Depo is already full");
 }
 
 bool Depot::hasCarriage(int _carriageNumber) const
 {
-	if (findCarriage(_carriageNumber) != -1)
-		return true;
-	else return false;
+	return findCarriage(_carriageNumber) != -1;
 }
 
 int Depot::findCarriage(int _carriageNumber)const
@@ -170,7 +168,7 @@ void Depot::addCarriage(int _carriageNumber, int _capacity)
 void Depot::addCarriage(int _carriageNumber)
 {
 	if (hasCarriage(_carriageNumber))
-		throw "Carriage is already exist";
+		throw std::logic_error("Carriage has already existed");
 	isCarriagesFullness();
 	Carriage * _pCarriage = new Carriage(_carriageNumber);
 	m_Carriages.push_back(_pCarriage);
@@ -208,12 +206,12 @@ void Depot::areHasCarriagesIntoTrain(int _trainNumber) const
 //		throw "Someone already at the train";
 //}
 
-void Depot::findHuman(std::string _humanName) const//не должно біть в депо
+void Depot::findHuman(const std::string &_humanName) const//не должно біть в депо
 {
 	for (int i = 0; i < getTrainsCount(); i++)
 	{
 		if (m_Trains[i]->findHuman(_humanName) != -1)
-		throw "Human already at the train";
+		throw std::logic_error("Human has been already at the train");
 	}
 }
 
@@ -235,7 +233,7 @@ void Depot::unfastenCarriage(int _trainNumber, int _carriageNumber)
 //	isTrainExist( _trainPos);
 	int _carriagePos=m_Trains[_trainPos]->findCarriage(_carriageNumber);
 	if (_carriagePos == -1)
-		throw "Carriage is not on this train";
+		throw std::logic_error("Carriage hasn't connected to this train");
 	m_Carriages.push_back(m_Trains[_trainPos]->getCarriage(_carriagePos));
 	m_Trains[_trainPos]->removeCarriage(_carriageNumber);
 }

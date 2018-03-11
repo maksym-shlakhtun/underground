@@ -29,7 +29,7 @@ Undeground::~Undeground()
 
 /*--------------------------------------------------------------------------------------------------------*/
 
-void Undeground::createBranch(std::string _branchName)
+void Undeground::createBranch(const std::string & _branchName)
 {
 	int _branchPos = findBranch(_branchName);
 	wasBranchAdded(_branchPos);
@@ -37,7 +37,7 @@ void Undeground::createBranch(std::string _branchName)
 	m_Branches.push_back(_branch);
 }
 
-void Undeground::createBranch(std::string _branchName, int _maxStations)
+void Undeground::createBranch(const std::string & _branchName, int _maxStations)
 {
 	int _branchPos = findBranch(_branchName);
 	wasBranchAdded(_branchPos);
@@ -46,11 +46,11 @@ void Undeground::createBranch(std::string _branchName, int _maxStations)
 }
 
 
-void Undeground::removeBranch(std::string _branchName)
+void Undeground::removeBranch(const std::string & _branchName)
 {
 	int _branchPos = findBranch(_branchName);
 	wasBranchNotAdded(_branchPos);
-	m_Branches[_branchPos]->IsStationsAreAdded();
+	m_Branches[_branchPos]->IsStationsAdded();
 	m_Branches.erase(m_Branches.begin() + _branchPos);
 }
 
@@ -60,19 +60,19 @@ int Undeground::getBranchesCount() const
 	return m_Branches.size();
 }
 
-std::string Undeground::getBranchName(int _branchPos) const
+const std::string & Undeground::getBranchName(int _branchPos) const
 {
-		return m_Branches.at(_branchPos)->getName();
+	return m_Branches.at(_branchPos)->getName();
 }
 
-int Undeground::getBranchMaxStations(std::string _branchName) const
+int Undeground::getBranchMaxStations(const std::string & _branchName) const
 {
 	int _branchPos=findBranch(_branchName);
 	wasBranchNotAdded(_branchPos);
 	return m_Branches[_branchPos]->getMaxStations();
 }
 
-int Undeground::getStationCount(std::string _branchName) const
+int Undeground::getStationCount(const std::string & _branchName) const
 {
 	int _branchPos=findBranch(_branchName);
 	wasBranchNotAdded(_branchPos);
@@ -80,14 +80,12 @@ int Undeground::getStationCount(std::string _branchName) const
 }
 
 
-bool Undeground::hasBranch(std::string _branchName) const
+bool Undeground::hasBranch(const std::string & _branchName) const
 {
-	if (findBranch(_branchName) == -1)
-		return false;
-	return true;
+	return findBranch(_branchName) != -1;
 }
 
-int Undeground::findBranch(std::string _branchName) const
+int Undeground::findBranch(const std::string & _branchName) const
 {
 	for (int i = 0; i < getBranchesCount(); i++)
 		if (m_Branches[i]->getName() == _branchName)
@@ -99,53 +97,53 @@ int Undeground::findBranch(std::string _branchName) const
 void Undeground::wasBranchAdded(int _branchPos) const
 {
 	if (_branchPos != -1)
-		throw "A branch with this name already exists";
+		throw std::logic_error("Branch's name has already existed");
 }
 
 void Undeground::wasBranchNotAdded(int _branchPos) const
 {
 	if (_branchPos == -1)
-		throw "A branch with this name has not been added";
+		throw std::logic_error("Branch's name doesn't exist");
 }
 
 void Undeground::wasBranchesNotAdded() const
 {
 	if (getBranchesCount()==0)
-	throw "Branches were not added";
+	throw std::logic_error("There are no branches at the underground");
 }
 
 /*----------------------------------------------------------------------------------------------------------------------*/
 
 
-void Undeground::addStationToBranch(std::string _stationName, std::string _branchName)
+void Undeground::addStationToBranch(const std::string & _stationName, const std::string & _branchName)
 {
 	int _branchPos = findBranch(_branchName);
 	wasBranchNotAdded(_branchPos);
 	m_Branches[_branchPos]->addStation(_stationName);
 }
 
-void Undeground::addStationToBranch(std::string _stationName, int _capacity, std::string _branchName)
+void Undeground::addStationToBranch(const std::string & _stationName, int _capacity, const std::string & _branchName)
 {
 	int _branchPos = findBranch(_branchName);
 	wasBranchNotAdded(_branchPos);
 	m_Branches[_branchPos]->addStation(_stationName, _capacity);
 }
 
-void Undeground::addStationToBranchIntoPos(std::string _stationName,  int _pos, std::string _branchName)
+void Undeground::addStationToBranchIntoPos(const std::string & _stationName,  int _pos, const std::string & _branchName)
 {
 	int _branchPos = findBranch(_branchName);
 	wasBranchNotAdded(_branchPos);
 	m_Branches[_branchPos]->addStationIntoPos(_stationName, _pos);
 }
 
-void Undeground::addStationToBranchIntoPos(std::string _stationName, int _capacity, int _pos, std::string _branchName)
+void Undeground::addStationToBranchIntoPos(const std::string & _stationName, int _capacity, int _pos, const std::string & _branchName)
 {
 	int _branchPos = findBranch(_branchName);
 	wasBranchNotAdded(_branchPos);
 	m_Branches[_branchPos]->addStationIntoPos(_stationName, _capacity , _pos);
 }
 
-void Undeground::removeStation(std::string _stationName)
+void Undeground::removeStation(const std::string & _stationName)
 {
 	wasBranchesNotAdded();
 	int _temp = 0;
@@ -185,7 +183,7 @@ void Undeground::createDepot(int _depotNumber)
 {
 	int _depotPos = findDepot(_depotNumber);
 	if (_depotPos != -1)
-		throw "Depo already exists";
+		throw std::logic_error("This depo already exist");
 	Depot * _depot = new Depot(_depotNumber);
 	m_Depots.push_back(_depot);
 }
@@ -194,12 +192,12 @@ void Undeground::createDepot(int _depotNumber, int _trainsCapacity, int _carriag
 {
 	int _depotPos = findDepot(_depotNumber);
 	if (_depotPos != -1)
-		throw "Depo already exists";
+		throw std::logic_error("This depo already exist");
 	Depot * _depot = new Depot(_depotNumber, _trainsCapacity,  _carriagesCapacity);
 	m_Depots.push_back(_depot);
 }
 
-void Undeground::addDepotToBranch(int _depotNumber, std::string _branchName)
+void Undeground::addDepotToBranch(int _depotNumber, const std::string & _branchName)
 {
 	wasDepotsNotAdded();
 	int _depotPos = findDepot(_depotNumber);
@@ -209,7 +207,7 @@ void Undeground::addDepotToBranch(int _depotNumber, std::string _branchName)
 	m_Branches[_branchPos]->addDepot(*m_Depots[_depotPos]);
 }
 
-void Undeground::removeDepotFromBranch(int _depotNumber, std::string _branchName)
+void Undeground::removeDepotFromBranch(int _depotNumber, const std::string & _branchName)
 {
 	wasDepotsNotAdded();
 	int _depotPos = findDepot(_depotNumber);
@@ -227,7 +225,7 @@ void Undeground::removeDepot(int _depotNumber)
 	for (int i = 0; i < getBranchesCount(); i++)
 	{
 		if (m_Branches[i]->getDepotNumber() == _depotNumber)
-			throw "The depot is still attached to a branch";
+			throw std::logic_error( "The depot still attaches to the branch");
 	}
 	m_Depots.erase(m_Depots.begin()+_depotPos);
 }
@@ -235,13 +233,13 @@ void Undeground::removeDepot(int _depotNumber)
 void Undeground::wasDepotNotAdded(int _depotPos) const
 {
 	if (_depotPos == -1)
-		throw std::logic_error  ("A depot with this number has not been added");
+		throw std::logic_error("There is no depo with this number");
 }
 
 void Undeground:: wasDepotsNotAdded() const
 {
 	if (getDepotsCount() == 0)
-		throw "Depots were not added";
+		throw std::logic_error("There are no depots at the underground");
 }
 
 
@@ -263,8 +261,8 @@ int Undeground::hasAddedTrainToDepot(int _trainNumber, int _depotNumber) const
 
 void Undeground::addTrainToDepot(int _trainNumber, int _depotNumber)
 {
-		wasDepotsNotAdded();
-		m_Depots[hasAddedTrainToDepot( _trainNumber,  _depotNumber)]->addTrain(_trainNumber);
+	wasDepotsNotAdded();
+	m_Depots[hasAddedTrainToDepot( _trainNumber,  _depotNumber)]->addTrain(_trainNumber);
 }
 
 void Undeground::addTrainToDepot(int _trainNumber, int _maxCarriages, int _depotNumber)
@@ -273,7 +271,7 @@ void Undeground::addTrainToDepot(int _trainNumber, int _maxCarriages, int _depot
 	m_Depots[hasAddedTrainToDepot(_trainNumber, _depotNumber)]->addTrain(_trainNumber, _maxCarriages);
 }
 
-void Undeground::addTrainToBranch(int _trainNumber, std::string _branchName, std::string _stationName)
+void Undeground::addTrainToBranch(int _trainNumber, const std::string & _branchName, const std::string & _stationName)
 {
 	wasDepotsNotAdded();
 	int _branchPos = findBranch(_branchName);
@@ -281,7 +279,7 @@ void Undeground::addTrainToBranch(int _trainNumber, std::string _branchName, std
 	m_Branches[_branchPos]->addTrainToBranch(_trainNumber,  _stationName);
 }
 
-void Undeground::removeTrainFromBranch(int _trainNumber, std::string _branchName)
+void Undeground::removeTrainFromBranch(int _trainNumber, const std::string & _branchName)
 {
 	wasDepotsNotAdded();
 	int _branchPos = findBranch(_branchName);
@@ -289,7 +287,7 @@ void Undeground::removeTrainFromBranch(int _trainNumber, std::string _branchName
 	m_Branches[_branchPos]->removeTrainIntoDepot(_trainNumber);
 }
 
-void Undeground::addTrainToStation(int _trainNumber, std::string _stationName)
+void Undeground::addTrainToStation(int _trainNumber, const std::string & _stationName)
 {
 	wasDepotsNotAdded();
 	wasBranchesNotAdded();
@@ -304,7 +302,7 @@ void Undeground::addTrainToStation(int _trainNumber, std::string _stationName)
 	m_Branches[0]->wasStationNotAdded(_stationPos);
 }
 
-void Undeground::removeTrain(int _trainNumber)//hjklkytdxcvb
+void Undeground::removeTrain(int _trainNumber)
 {
 	wasDepotsNotAdded();
 	int _temp = 0;
@@ -319,7 +317,7 @@ void Undeground::removeTrain(int _trainNumber)//hjklkytdxcvb
 		_temp = 1;
 	}
 	if (_temp == 0)
-		throw "This train already at the branch";
+		throw std::logic_error("This train has been already at the branch");
 }
 
 void Undeground::addCarriageToDepot(int _carriageNumber, int _depotNumber)
@@ -349,9 +347,22 @@ void Undeground::addCarriageToTrain(int _carriageNumber, int _trainNumber)
 		_trainPos = m_Depots[i]->findTrain(_trainNumber);
 		_carriagePos = m_Depots[i]->findCarriage(_carriageNumber);
 		_branchPos= findDepotIntoBranches(m_Depots[i]->getNumber());
-		if (((_trainPos != -1) && (_carriagePos != -1) && (_branchPos == -1)) || ((_trainPos != -1) && (_carriagePos != -1) && (_branchPos != -1) && !(m_Branches[_branchPos]->hasTrain(_trainNumber))))
+		if (
+				(
+						 (_trainPos != -1)
+					&& (_carriagePos != -1) 
+					&& (_branchPos == -1)
+				) 
+				|| 
+				(
+						(_trainPos != -1) 
+					&& (_carriagePos != -1) 
+					&& (_branchPos != -1) 
+					&& !(m_Branches[_branchPos]->hasTrain(_trainNumber))
+				)
+			)
 			m_Depots[i]->addCarriageToTrain(_trainNumber, _carriageNumber);
-		else throw "Carriage can not be added";
+		else throw std::logic_error("You can't add this carriage to train");
 	}
 }
 
@@ -374,7 +385,7 @@ void Undeground::removeCarriageFromTrain(int _carriageNumber, int _trainNumber)
 		break;
 	}
 		if (_temp==-1)
-			throw "Carriage can not be disconnected";
+			throw std::logic_error("You can't disconnect this carriage from the train");
 }
 
 void Undeground::removeCarriage(int _carriageNumber)
@@ -399,7 +410,7 @@ int Undeground::getHumansCount() const
 }
 
 
-int Undeground::findHuman(std::string _humanName) const
+int Undeground::findHuman(const std::string & _humanName) const
 {
 	for (int i = 0; i < getHumansCount(); i++)
 	{
@@ -409,14 +420,14 @@ int Undeground::findHuman(std::string _humanName) const
 	return -1;
 }
 
-void Undeground::findHumanIntoUndeground(std::string _humanName) const
+void Undeground::findHumanIntoUndeground(const std::string & _humanName) const
 {
 	for (int i = 0; i < getBranchesCount(); i++)
 		m_Branches[i]->findHuman(_humanName);
 }
 
 
-void Undeground::createHuman(std::string _humanName)
+void Undeground::createHuman(const std::string & _humanName)
 {
 	int _humanPos = findHuman(_humanName);
 	wasHumanAdded(_humanPos);
@@ -424,7 +435,7 @@ void Undeground::createHuman(std::string _humanName)
 	m_Humans.push_back(_human);
 }
 
-void Undeground::addHumanToStation(std::string  _humanName, std::string _stationName)
+void Undeground::addHumanToStation(const std::string &  _humanName, const std::string & _stationName)
 {
 	wasBranchesNotAdded();
 	int _humanPos = findHuman(_humanName);
@@ -441,7 +452,7 @@ void Undeground::addHumanToStation(std::string  _humanName, std::string _station
 		m_Branches[0]->wasStationNotAdded(_temp);
 }
 
-void Undeground::addHumanToTrain(std::string  _humanName, std::string _platform)
+void Undeground::addHumanToTrain(const std::string &  _humanName, const std::string & _platform)
 {
 	hasAddHuman(_humanName);
 	for (int i = 0; i<getBranchesCount(); i++)
@@ -449,10 +460,10 @@ void Undeground::addHumanToTrain(std::string  _humanName, std::string _platform)
 		if (m_Branches[i]->moveHumanFromStationToTrain(_humanName, _platform))
 			return;
 	}
-	throw std::logic_error("This operation is impossible");
+	throw std::logic_error("This operation is not possible");
 }
 
-void Undeground::addHumanToTrain(std::string  _humanName, std::string _platform, int _carriageNumber)
+void Undeground::addHumanToTrain(const std::string &  _humanName, const std::string & _platform, int _carriageNumber)
 {
 	hasAddHuman(_humanName);
 	for (int i = 0; i<getBranchesCount(); i++)
@@ -460,10 +471,10 @@ void Undeground::addHumanToTrain(std::string  _humanName, std::string _platform,
 		 if (m_Branches[i]->moveHumanFromStationToTrain(_humanName, _platform, _carriageNumber))
 		 return;
 	}
-		throw std::logic_error("This operation is impossible");
+		throw std::logic_error("This operation is not possible");
 }
 
-void Undeground::moveHumanFromTrainToStation(std::string _humanName, std::string _stationName) 
+void Undeground::moveHumanFromTrainToStation(const std::string & _humanName, const std::string & _stationName) 
 {
 	hasAddHuman(_humanName);
 	for (int i = 0; i<getBranchesCount(); i++)
@@ -471,23 +482,23 @@ void Undeground::moveHumanFromTrainToStation(std::string _humanName, std::string
 		if (m_Branches[i]->moveHumanFromTrainToStation(_humanName, _stationName))
 			return;
 	}
-	throw std::logic_error("Human is not on train");
+	throw std::logic_error("Human isn't situating at the train now");
 }
 
-void Undeground::hasAddHuman(std::string  _humanName) const
+void Undeground::hasAddHuman(const std::string &  _humanName) const
 {
 	int _humanPos = findHuman(_humanName);
 	wasBranchesNotAdded();
 	wasHumanNotAdded(_humanPos);
 }
-void Undeground::permanentlyRemoveHuman(std::string _humanName)
+void Undeground::permanentlyRemoveHuman(const std::string & _humanName)
 {
 	int _humanPos = findHuman(_humanName);
 	removeHuman(_humanName, _humanPos);
 	m_Humans.erase(m_Humans.begin() + _humanPos);
 }
 
-void Undeground::removeHumanFromStation(std::string  _humanName)
+void Undeground::removeHumanFromStation(const std::string &  _humanName)
 {
 	int _humanPos = findHuman(_humanName);
 	removeHuman(_humanName, _humanPos);
@@ -497,17 +508,17 @@ void Undeground::removeHumanFromStation(std::string  _humanName)
 void Undeground::wasHumanAdded(int _humanPos) const 
 {
 	if (_humanPos != -1)
-		throw "Human with this name already exists";
+		throw std::logic_error("Human's name has already exist");
 }
 
 void Undeground::wasHumanNotAdded(int _humanPos) const
 {
 	if (_humanPos == -1)
-		throw "Human with this name has not been added";
+		throw std::logic_error("Human hasn't been add");
 }
 
 
-void Undeground::removeHuman(std::string  _humanName, int  _humanPos)
+void Undeground::removeHuman(const std::string &  _humanName, int  _humanPos)
 {
 	wasHumanNotAdded(_humanPos);
 
