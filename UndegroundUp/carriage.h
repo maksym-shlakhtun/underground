@@ -22,7 +22,7 @@ public:
 	int addHuman(Human &_passenger);
 	Human * getAndRemoveHuman (int _humanPos);
 	int findHuman(Human & _human) const;
-	int findHuman(std::string _humanName) const;
+	int findHuman(const std::string &_humanName) const;
 	
 	bool Follness() const;
 	int  nEmptySeats() const;

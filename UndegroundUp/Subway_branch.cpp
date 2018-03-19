@@ -6,6 +6,8 @@
 #include "train.h"
 #include "human.h"
 
+
+
 SubwayBranch::SubwayBranch(const std::string & _Name, int _maxStations)
 	: m_Name(_Name), m_maxStations(_maxStations)
 {
@@ -42,7 +44,7 @@ SubwayBranch::~SubwayBranch()
 		delete _pStation;
 }
 
-Train * SubwayBranch::getTrain(int _platform, int _stationPosBegin) const
+Train * SubwayBranch::getTrain(Platforms _platform, int _stationPosBegin) const
 {
 	return m_Stations[_stationPosBegin]->getTrain(_platform);
 }
@@ -172,7 +174,7 @@ void SubwayBranch::removeTrainIntoDepot(int _trainNumber) const
 	isEndStation(_stationPos);
 
 	//m_pDepot->hasHumans(_trainNumber);//or drop people to station
-m_pDepot->addTrain(m_Stations[_stationPos]->getTrain(_trainNumber));	
+m_pDepot->addTrain(m_Stations[_stationPos]->Station::getTrain(_trainNumber));	
 hasRemoveTrainIntoDepot(_trainNumber, _stationPos);
 	
 	
@@ -206,9 +208,9 @@ void SubwayBranch::MoveTrain(int _trainNumber, const std::string & _stationName)
 {
 	int _stationPos = findStation(_stationName);
 	int _stationPosBegin=findTrain(_trainNumber);
-	int _platform=IncorrectStation(_trainNumber, _stationPos, _stationPosBegin);
+	Platforms _platform=(Platforms)IncorrectStation(_trainNumber, _stationPos, _stationPosBegin);
 	Train * train1 = getTrain(_platform, _stationPosBegin);
-	if (_platform == 1)
+	if (_platform == Platforms::Right)
 	{
 		m_Stations[_stationPosBegin]->departureRight();
 		m_Stations[_stationPos]->arrivedRight(train1);
@@ -330,12 +332,12 @@ bool SubwayBranch::moveHumanFromStationToTrain(const std::string & _humanName,co
 		if (
 				(
 						(_stationEnd < i)
-					&& (m_Stations[i]->moveHumanToTrain(_humanName, 2))
+					&& (m_Stations[i]->moveHumanToTrain(_humanName, Platforms::Left))
 				)
 				||
 				(
 						(_stationEnd > i)
-					&& (m_Stations[i]->moveHumanToTrain(_humanName, 1))
+					&& (m_Stations[i]->moveHumanToTrain(_humanName, Platforms::Right))
 				)
 			)
 				return true;
@@ -353,12 +355,12 @@ bool SubwayBranch::moveHumanFromStationToTrain(const std::string & _humanName, c
 		if (
 			(
 			(_stationEnd < i)
-				&& (m_Stations[i]->moveHumanToTrain(_humanName, 2, _carriageNumber))
+				&& (m_Stations[i]->moveHumanToTrain(_humanName, Platforms::Left, _carriageNumber))
 				)
 			||
 			(
 			(_stationEnd > i)
-				&& (m_Stations[i]->moveHumanToTrain(_humanName, 1, _carriageNumber))
+				&& (m_Stations[i]->moveHumanToTrain(_humanName, Platforms::Right, _carriageNumber))
 				)
 			)
 			return true;

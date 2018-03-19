@@ -2,11 +2,12 @@
 #include<vector>
 #include <string>
 
+
 class Station;
 class Depot;
 class Train;
 class Human;
-
+enum class Platforms;
 
 class SubwayBranch
 {
@@ -20,7 +21,7 @@ public:
 	int getMaxStations() const;
 	int getStationsCount() const;
 	Station & getStation(int _pos) const;
-	Train * getTrain(int _trainNumber, int _stationPosBegin) const;
+	Train * getTrain(Platforms _platform, int _stationPosBegin) const;
 
 	/*--------------------------------------------------------------------------------------------------------*/
 
@@ -84,14 +85,23 @@ public:
 	void IsStationsNotAdded() const;
 	void IsStationsAdded() const;
 
+
+	static int getMaxNormalStations();
+
 private:
+	static const int maxNormalStationsCount = 10;
+
 	std::string m_Name;
 	int m_maxStations;
 	std::vector<Station *> m_Stations;
 	Depot * m_pDepot;
-};
+	};
 
 
+inline int SubwayBranch::getMaxNormalStations()
+{
+	return maxNormalStationsCount;
+}
 
 inline void SubwayBranch::isDepotNotAttach() const
 {
@@ -133,7 +143,7 @@ if (_stationPos != 0 && _stationPos != getStationsCount() - 1)
 
 inline void SubwayBranch::IncorrectMaxStations(int _maxStations) const
 {
-	if (_maxStations < 0 || _maxStations>10)
+	if (_maxStations < 0 || _maxStations>SubwayBranch::maxNormalStationsCount)
 		throw std::logic_error("Incorrect maximum number of stations");
 }
 

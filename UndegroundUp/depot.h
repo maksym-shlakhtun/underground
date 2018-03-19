@@ -23,9 +23,9 @@ public:
 	bool hasTrain(int _trainNumber) const;
 	int findTrain(int _trainNumber) const;
 	int findTrain(Train &_train) const;
-	void  addTrain(Train * _train);
-	void	addTrain(int _trainNumber);
-	void	addTrain(int _trainNumber, int _maxCarriages);
+	void addTrain(Train * _train);
+	void addTrain(int _trainNumber);
+	void addTrain(int _trainNumber, int _maxCarriages);
 	void removeTrain(Train & _train);
 	void removeTrain(int _trainPos);
 	Train * getTrain(int _pos) const;
@@ -35,8 +35,8 @@ public:
 	bool hasCarriage(int _carriageNumber) const;
 	int findCarriage(Carriage & _carriage) const;
 	int findCarriage(int _carriageNumber) const;
-	void	addCarriage(int _carriageNumber, int _carriage);
-	void	addCarriage(int _carriageNumber);
+	void addCarriage(int _carriageNumber, int _carriage);
+	void addCarriage(int _carriageNumber);
 	void removeCarriage(int _carriageNumber);
 	Carriage * getCarriage(int _carriageNumber) const;
 	

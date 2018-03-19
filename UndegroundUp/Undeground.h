@@ -9,6 +9,7 @@ class Train;
 class Carriage;
 class Human;
 class Depot;
+enum class Platforms;
 
 class Undeground
 {

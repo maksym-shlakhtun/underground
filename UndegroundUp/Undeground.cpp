@@ -312,7 +312,14 @@ void Undeground::removeTrain(int _trainNumber)
 		int _trainPos = m_Depots[i]->findTrain(_trainNumber);
 		if (_trainPos != -1)
 			_branchPos = findDepotIntoBranches(m_Depots[i]->getNumber());
-		if ((_branchPos == -1) || ((_branchPos != -1) && (m_Branches[_branchPos]->findTrain(_trainNumber) == -1)))
+		if (
+				(_branchPos == -1) 
+				|| 
+				(
+						(_branchPos != -1) 
+					&& (m_Branches[_branchPos]->findTrain(_trainNumber) == -1)
+				)
+			)
 			m_Depots[i]->removeTrain(_trainPos);
 		_temp = 1;
 	}

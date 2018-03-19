@@ -36,19 +36,25 @@ public:
 	//int getAddedpassengers() const;
 	Human * getHuman(const std::string & _humanName) const;
 
-	
+	int getMaxNormalCariagesCount();
 
 private:
-	
-//	int m_trainCapacity;   
+	static const int maxNormalCariagesCount = 10;
+
 	std::vector <Carriage *> m_Carriages;
 	int m_maxCarriages;
 	int m_Number;
 
 	void incorrectNumber(int _number) const;
 	void incorrectMaxCarriages(int _maxCarriages)const;
-	inline void NonexistentCarriageNumber(int _number) const;
+	void NonexistentCarriageNumber(int _number) const;
 };
+
+
+inline int Train::getMaxNormalCariagesCount()
+{
+	return maxNormalCariagesCount;
+}
 
 inline void Train::incorrectNumber(int _number) const
 {

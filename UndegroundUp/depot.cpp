@@ -53,7 +53,7 @@ int Depot::getCarriagesCount() const
 void Depot::isTrainsFullness() const
 {
 	if (getTrainsCount() + 1 > getTrainsCapacity())
-		throw "Depo already full";
+		throw std::logic_error("Depo is already full");
 }
 
 

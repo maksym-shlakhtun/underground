@@ -67,7 +67,7 @@ int Carriage::findHuman(Human & _human) const
 	return -1;
 }
 
-int Carriage::findHuman(std::string _humanName) const
+int Carriage::findHuman(const std::string &_humanName) const
 {
 	int nHuman = getHumansCount();
 	for (int i = 0; i < nHuman; i++)
