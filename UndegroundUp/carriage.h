@@ -10,7 +10,7 @@ public:
 
 	Carriage(int _number, int _capacity=10);
 	Carriage(const Carriage &) = delete;
-	Carriage & operator = (Carriage & _temp) = delete;
+	Carriage & operator = (const Carriage & _temp) = delete;
 	~Carriage() {}
 
 	int getCapacity() const;
@@ -19,9 +19,9 @@ public:
 	Human * getHuman(const std::string &_humanName) const;
 	Human * getHuman(int _humanPos) const;
 
-	int addHuman(Human &_passenger);
+	int addHuman (Human *_passenger);
 	Human * getAndRemoveHuman (int _humanPos);
-	int findHuman(Human & _human) const;
+	int findHuman(const Human & _human) const;
 	int findHuman(const std::string &_humanName) const;
 	
 	bool Follness() const;

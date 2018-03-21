@@ -42,7 +42,7 @@ public:
 	
 	void areHasCarriagesIntoTrain(int _trainNumber) const;
 	void hasHumans(int _trainNumber) const;
-	void findHuman(const std::string & _humanName) const;
+//	void findHuman(const std::string & _humanName) const;
 	
 	void addCarriageToTrain(int _trainNumber, int _carriageNumber);
 	void unfastenCarriage(int _trainNumber, int _carriageNumber);

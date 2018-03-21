@@ -57,10 +57,18 @@ bool SubwayBranch::hasStations() const
 }
 
 
-int SubwayBranch ::findStation(const std::string & _station) const
+int SubwayBranch ::findStation(const std::string & _stationName) const
 {
 	for (int i = 0; i < getStationsCount(); i++)
-		if (m_Stations[i]->getName() == _station)
+		if (m_Stations[i]->getName() == _stationName)
+			return i;
+	return -1;
+}
+
+int SubwayBranch::findStation(Station * _pstation) const
+{
+	for (int i = 0; i < getStationsCount(); i++)
+		if (m_Stations[i] == _pstation)
 			return i;
 	return -1;
 }
@@ -106,24 +114,27 @@ void SubwayBranch::addStationIntoPos(Station *_pstation, int _pos)
 	m_Stations.insert(m_Stations.begin()+_pos-1, _pstation);
 }
 
-int SubwayBranch::removeStation(Station &_station)
+bool SubwayBranch::removeStation(Station &_station)
 {
 	int _stationPos = findStation(_station.getName());
 	if (_stationPos == -1)
-		return _stationPos;
+		return false;
 	m_Stations.erase(m_Stations.begin() + _stationPos);
-	return 1;
+	return true;
 }
 
-int SubwayBranch::removeStation(const std::string & _stationName)
+bool SubwayBranch::removeStation(const std::string & _stationName)
 {
 	int _stationPos = findStation(_stationName);
+
 	if (_stationPos == -1)
-		return _stationPos;
+		return false;
+
 	if ((m_Stations[_stationPos]->hasTrains()) || (m_Stations[_stationPos]->hasArrivedLeft()) || (m_Stations[_stationPos]->hasArrivedRight()))
 		throw std::logic_error("The station is using at the moment");
-		m_Stations.erase(m_Stations.begin() + _stationPos);
-	return 1;
+
+	m_Stations.erase(m_Stations.begin() + _stationPos);
+	return true;
 }
 
 /*--------------------------------------------------------------------------------------------------------*/
@@ -149,6 +160,28 @@ void SubwayBranch::addTrainToBranch(int _trainNumber, const std::string & _stati
 	isDepotNotAttach();
 	areStationsNotAdd();
 	int _stationPos = findStation(_stationName);
+	wasStationNotAdded(_stationPos);
+	isEndStation(_stationPos);
+	m_pDepot->areHasCarriagesIntoTrain(_trainNumber);
+	int _trainPos = m_pDepot->findTrain(_trainNumber);
+	//IsTrainAtTheBranch(_trainNumber);
+
+	if (_stationPos == 0)
+	{
+		m_Stations[_stationPos]->arrivedRight(m_pDepot->getTrain(_trainPos));
+		if (_stationPos == getStationsCount() - 1)
+		{
+			m_Stations[_stationPos]->arrivedLeft(m_pDepot->getTrain(_trainPos));
+		}
+	}
+	m_pDepot->removeTrain(_trainPos);
+}
+
+void SubwayBranch::addTrainToBranch(int _trainNumber, Station *_pstation) const
+{
+	isDepotNotAttach();
+	areStationsNotAdd();
+	int _stationPos = findStation(_pstation);
 	wasStationNotAdded(_stationPos);
 	isEndStation(_stationPos);
 	m_pDepot->areHasCarriagesIntoTrain(_trainNumber);
@@ -296,13 +329,22 @@ void SubwayBranch::findHuman(const std::string &_humanName) const
 	}
 }
 
+void SubwayBranch::findHuman(const Human & _human) const
+{
+	for (int i = 0; i < getStationsCount(); i++)
+	{
+		if ((m_Stations[i]->findHuman(_human) != -1) || (m_Stations[i]->findHumanInTrain(_human, 1) == 1) || (m_Stations[i]->findHumanInTrain( _human, 2) == 1))
+			throw std::logic_error("Human has been already at the branch");
+	}
+}
 
-int  SubwayBranch::addHumanToStation(Human * _human, const std::string & _stationName)
+
+int  SubwayBranch::addHumanToStation(Human * _phuman, const std::string & _stationName)
 {
 	int _stationPos = findStation(_stationName);
 	if (_stationPos != -1)
 	{
-		m_Stations[_stationPos]->addHuman(_human);
+		m_Stations[_stationPos]->addHuman(_phuman);
 		return 1;
 	}
 	else return -1;

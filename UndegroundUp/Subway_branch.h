@@ -10,8 +10,11 @@ class Human;
 enum class Platforms;
 
 class SubwayBranch
+
 {
+
 public:
+
 	SubwayBranch(const std::string &_name, int _maxStations=10);
 	SubwayBranch(const SubwayBranch &) = delete;
 	SubwayBranch & operator = (const SubwayBranch &) = delete;
@@ -26,8 +29,8 @@ public:
 	/*--------------------------------------------------------------------------------------------------------*/
 
 	bool hasStations() const;
-	bool hasStation(const std::string & _stationName) const;
-	int findStation(const std::string & _station) const;
+	int findStation(const std::string & _stationName) const;
+	int findStation(Station * _pstation) const;
 
 	void addStation(Station * _pstation);
 	void addStation(const std::string &_stationName);
@@ -35,8 +38,8 @@ public:
 	void addStationIntoPos(const std::string &_stationName, int _capacity, int _pos);
 	void addStationIntoPos(const std::string &_stationName, int _pos);
 	void addStationIntoPos(Station * _pstation, int _pos);
-	int removeStation(const std::string &_stationName);
-	int removeStation(Station &_station);
+	bool removeStation(const std::string &_stationName);
+	bool removeStation(Station &_station);
 
 	/*--------------------------------------------------------------------------------------------------------*/
 
@@ -46,6 +49,7 @@ public:
 	int findTrain(int _number) const;
 
 	void addTrainToBranch(int _trainNumber, const std::string &_stationName) const;
+	void addTrainToBranch(int _trainNumber, Station *_pstation) const;
 	void removeTrainIntoDepot(int _trainNumber) const;
 
 	void MoveTrain(int _trainNumber, const std::string &_stationName);
@@ -65,7 +69,9 @@ public:
 	/*--------------------------------------------------------------------------------------------------------*/
 
 	void findHuman(const std::string & _humanName) const;
-	int addHumanToStation(Human * _human, const std::string & _stationName);
+	void findHuman(const Human & _human) const;
+
+	int addHumanToStation(Human * _phuman, const std::string & _stationName);
 	bool hasHumansInTrain(int _stationPos, int _trainNumber) const;
 	bool moveHumanFromTrainToStation(const std::string &_humanName, const std::string & _stationName);
 	bool moveHumanFromStationToTrain(const std::string &_humanName, const std::string & _stationName);
@@ -89,12 +95,14 @@ public:
 	static int getMaxNormalStations();
 
 private:
+
 	static const int maxNormalStationsCount = 10;
 
 	std::string m_Name;
 	int m_maxStations;
 	std::vector<Station *> m_Stations;
 	Depot * m_pDepot;
+
 	};
 
 
@@ -111,7 +119,7 @@ inline void SubwayBranch::isDepotNotAttach() const
 inline void SubwayBranch::areStationsNotAdd() const
 {
 	if (!hasStations())
-		throw std::logic_error("Subway branch doesnt have any station");
+		throw std::logic_error("Subway branch doesn't have any station");
 }
 inline void SubwayBranch:: wasStationAdded(const std::string & _stationName) const
 {
@@ -121,24 +129,24 @@ inline void SubwayBranch:: wasStationAdded(const std::string & _stationName) con
 inline void SubwayBranch:: wasStationNotAdded(int _stationPos) const
 {
 	if (_stationPos == -1)
-		throw std::logic_error("Subway branches arent' including this station now ");
+		throw std::logic_error("Subway branches aren't including this station now ");
 }
 inline void SubwayBranch::IsTrainNotAdd(int _stationPos) const
 {
 	if (_stationPos == -1)
-		throw std::logic_error("Train hasn't been added to brunchh");
+		throw std::logic_error("Train hasn't been added to branch");
 }
 
 inline void SubwayBranch::IsTrainAtTheBranch(int _trainNumber) const
 {
-if (findTrain(_trainNumber) != -1)
+	if (findTrain(_trainNumber) != -1)
 		throw std::logic_error("Train have already been at the branch");
 }
 
 inline void SubwayBranch::isEndStation(int _stationPos) const
 {
 if (_stationPos != 0 && _stationPos != getStationsCount() - 1)
-		throw std::logic_error("This station isn't final sation");
+		throw std::logic_error("This station isn't final station");
 }
 
 inline void SubwayBranch::IncorrectMaxStations(int _maxStations) const

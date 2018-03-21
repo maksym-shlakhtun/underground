@@ -27,7 +27,6 @@ int Station::getHumansCount() const
 	return m_humans.size();
 }
 
-
 Train * Station::getTrain(Platforms _platform) const
 {
 	isArrived(_platform);
@@ -172,7 +171,7 @@ int Station::findHuman(const std::string & _humanName) const
 void Station::addHuman(Human * _human)
 {
 	isFullnes();
-	isHumanAtTheStation( *_human);
+	isHumanAtTheStation(*_human);
 	m_humans.push_back(_human);
 }
 
@@ -216,6 +215,26 @@ bool Station::findHumanInTrain(const std::string & _humanName, int _platform) co
 		return false;
 }
 
+bool Station::findHumanInTrain(const Human & _human, int _platform) const
+{
+	if
+		(
+		(
+			hasArrivedLeft()
+			&& (m_pLeftTrain->findHuman(_human) != -1)
+			)
+			||
+			(
+				hasArrivedRight()
+				&& (m_pRightTrain->findHuman(_human) != -1)
+				)
+			)
+		return true;
+	else
+		return false;
+}
+
+
 bool  Station::moveHumanToTrain(const std::string & _humanName, Platforms _platform)
 {
 	int _humanPos = findHuman(_humanName);
@@ -226,11 +245,11 @@ bool  Station::moveHumanToTrain(const std::string & _humanName, Platforms _platf
 	isArrived(_platform);
 	if (_platform == Platforms::Right)
 	{
-		m_pRightTrain->addHuman(*m_humans[_humanPos]);
+		m_pRightTrain->addHuman(m_humans[_humanPos]);
 	}
 	else
 	{
-		m_pLeftTrain->addHuman(*m_humans[_humanPos]);
+		m_pLeftTrain->addHuman(m_humans[_humanPos]);
 	}
 		m_humans.erase(m_humans.begin() + _humanPos);
 		return true;
@@ -246,11 +265,11 @@ bool  Station::moveHumanToTrain(const std::string &_humanName, Platforms _platfo
 	isArrived(_platform);
 	if (_platform == Platforms::Right)
 	{
-		m_pRightTrain->addHuman(*m_humans[_humanPos], _carriageNumber);
+		m_pRightTrain->addHuman(m_humans[_humanPos], _carriageNumber);
 	}
 	else
 	{
-		m_pLeftTrain->addHuman(*m_humans[_humanPos], _carriageNumber);
+		m_pLeftTrain->addHuman(m_humans[_humanPos], _carriageNumber);
 	}
 		m_humans.erase(m_humans.begin() + _humanPos);
 		return true;

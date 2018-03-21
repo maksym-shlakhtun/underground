@@ -206,14 +206,14 @@ void Depot::areHasCarriagesIntoTrain(int _trainNumber) const
 //		throw "Someone already at the train";
 //}
 
-void Depot::findHuman(const std::string &_humanName) const//не должно біть в депо
-{
-	for (int i = 0; i < getTrainsCount(); i++)
-	{
-		if (m_Trains[i]->findHuman(_humanName) != -1)
-		throw std::logic_error("Human has been already at the train");
-	}
-}
+//void Depot::findHuman(const std::string &_humanName) const//не должно біть в депо
+//{
+//	for (int i = 0; i < getTrainsCount(); i++)
+//	{
+//		if (m_Trains[i]->findHuman(_humanName) != -1)
+//		throw std::logic_error("Human has been already at the train");
+//	}
+//}
 
 
 void Depot::addCarriageToTrain(int _trainNumber, int _carriageNumber)

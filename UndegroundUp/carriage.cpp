@@ -43,22 +43,21 @@ Human * Carriage::getHuman(int _humanPos) const
 }
 
 
-int Carriage::addHuman(Human & _passenger)
+int Carriage::addHuman(Human * _passenger)
 {
 	if (m_passengers.size() == m_Capacity)
 		return -1;
-
 /*	else
 		if (findHuman( _passenger) != -1)
-			throw "Human is alredy in the carriage";*/
+			throw "Human is already in the carriage";*/
 
-		m_passengers.push_back(&_passenger);
+		m_passengers.push_back(_passenger);
 		return 1;
 	
 }
 
 
-int Carriage::findHuman(Human & _human) const
+int Carriage::findHuman(const Human & _human) const
 {
 	int nHuman = getHumansCount();
 	for (int i = 0; i < nHuman; i++)

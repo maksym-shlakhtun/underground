@@ -24,7 +24,6 @@ public:
 	const std::string & getName() const;
 	int getCapacity() const;
 	int getHumansCount() const;
-	Human & getHuman() const;
 	Train * getTrain(Platforms _platform) const;
 	Train * getTrain(int _trainNumber) const;
 	int getTrainNumber(Platforms _platform) const;
@@ -44,11 +43,11 @@ public:
 	int findHuman(const Human & _human) const;
 	int findHuman(const std::string & _humanName) const;
 	void addHuman(Human * _human);
-	int removeHuman(Human &_human);
-
+	int removeHuman(Human & _human);
 	bool removeHuman(const std::string &_humanName);
 
 	bool findHumanInTrain(const std::string & _humanName, int _platform) const;
+	bool findHumanInTrain(const Human & _human, int _platform) const;
 	bool moveHumanToTrain(const std::string & _humanName, Platforms _platform);
 	bool moveHumanToTrain(const std::string & _humanName, Platforms _platform, int _carriageNumber);
 
@@ -56,7 +55,7 @@ public:
 
 	void isHumanAtTheStation(const std::string & _humanName) const;
 	void isHumanAtTheStation(int _humanPos) const;
-
+	
 
 private:
 	static const int maxNormalHumanCount = 100;
@@ -74,7 +73,7 @@ private:
 	void isArrived() const;
 	void isArrived(Platforms _platform) const;
 	void isFullnes() const;
-	void isHumanAtTheStation(Human & _human) const;
+	void isHumanAtTheStation(const Human & _human) const;
 
 	
 	void isHumanNotAtTheStation(int _humanPos) const;
@@ -115,7 +114,7 @@ inline void Station::isArrived(Platforms _platform) const
 		throw std::logic_error("Train hasn't arrived to the station");
 }
 
-inline void Station::isHumanAtTheStation(Human & _human) const
+inline void Station::isHumanAtTheStation(const Human & _human) const
 {
 	if (findHuman(_human) != -1)
 		throw std::logic_error("Human is at the station now");

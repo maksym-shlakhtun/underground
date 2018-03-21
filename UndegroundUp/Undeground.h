@@ -24,13 +24,21 @@ public:
 	int getBranchesCount() const;
 	const std::string & getBranchName(int _branchPos) const;
 	int getBranchMaxStations(const std::string & _branchName) const;
+	int getBranchMaxStations(const SubwayBranch & _branch) const;
+
 	int getStationCount(const std::string & _branchName) const;
+	int getStationCount(const SubwayBranch & _branch) const;
 	bool hasBranch(const std::string & _branchName) const;
+	bool hasBranch(const SubwayBranch & _branch) const;
 	int findBranch(const std::string & _branchName) const;
+	int findBranch(const SubwayBranch & _branch) const;
+
 
 	void createBranch(const std::string & _branchName);
 	void createBranch(const std::string &  _branchName, int _maxStations);
 	void removeBranch(const std::string & _branchName);
+	void removeBranch(const SubwayBranch &_branch);
+
 	
 	void wasBranchAdded(int _branchpos) const;
 	void wasBranchNotAdded(int _branchPos) const;
@@ -99,8 +107,5 @@ private:
 	std::vector<Train *>m_Trains;
 
 	void removeHuman(const std::string &  _humanName, int _humanPos);
-
-
-
 };
 

@@ -29,32 +29,6 @@ Undeground::~Undeground()
 
 /*--------------------------------------------------------------------------------------------------------*/
 
-void Undeground::createBranch(const std::string & _branchName)
-{
-	int _branchPos = findBranch(_branchName);
-	wasBranchAdded(_branchPos);
-	SubwayBranch * _branch = new SubwayBranch(_branchName);
-	m_Branches.push_back(_branch);
-}
-
-void Undeground::createBranch(const std::string & _branchName, int _maxStations)
-{
-	int _branchPos = findBranch(_branchName);
-	wasBranchAdded(_branchPos);
-	SubwayBranch * _branch = new SubwayBranch(_branchName, _maxStations);
-	m_Branches.push_back(_branch);
-}
-
-
-void Undeground::removeBranch(const std::string & _branchName)
-{
-	int _branchPos = findBranch(_branchName);
-	wasBranchNotAdded(_branchPos);
-	m_Branches[_branchPos]->IsStationsAdded();
-	m_Branches.erase(m_Branches.begin() + _branchPos);
-}
-
-
 int Undeground::getBranchesCount() const
 {
 	return m_Branches.size();
@@ -72,6 +46,13 @@ int Undeground::getBranchMaxStations(const std::string & _branchName) const
 	return m_Branches[_branchPos]->getMaxStations();
 }
 
+int Undeground::getBranchMaxStations(const SubwayBranch & _branch) const
+{
+	int _branchPos = findBranch(_branch);
+	wasBranchNotAdded(_branchPos);
+	return m_Branches[_branchPos]->getStationsCount();
+}
+
 int Undeground::getStationCount(const std::string & _branchName) const
 {
 	int _branchPos=findBranch(_branchName);
@@ -79,10 +60,21 @@ int Undeground::getStationCount(const std::string & _branchName) const
 	return m_Branches[_branchPos]->getStationsCount();
 }
 
+int Undeground::getStationCount(const SubwayBranch & _branch) const
+{
+	int _branchPos = findBranch(_branch);
+	wasBranchNotAdded(_branchPos);
+	return m_Branches[_branchPos]->getStationsCount();
+}
 
 bool Undeground::hasBranch(const std::string & _branchName) const
 {
 	return findBranch(_branchName) != -1;
+}
+
+bool Undeground::hasBranch(const SubwayBranch & _branch) const
+{
+	return findBranch(_branch) != -1;
 }
 
 int Undeground::findBranch(const std::string & _branchName) const
@@ -91,6 +83,47 @@ int Undeground::findBranch(const std::string & _branchName) const
 		if (m_Branches[i]->getName() == _branchName)
 			return i;
 	return -1;
+}
+
+int Undeground::findBranch(const SubwayBranch & _branch) const
+{
+	for (int i = 0; i < getBranchesCount(); i++)
+		if (m_Branches[i]->getName() == _branch.getName())
+			return i;
+	return -1;
+}
+
+
+void Undeground::createBranch(const std::string & _branchName)
+{
+	int _branchPos = findBranch(_branchName);
+	wasBranchAdded(_branchPos);
+	SubwayBranch * _branch = new SubwayBranch(_branchName);
+	m_Branches.push_back(_branch);
+}
+
+void Undeground::createBranch(const std::string & _branchName, int _maxStations)
+{
+	int _branchPos = findBranch(_branchName);
+	wasBranchAdded(_branchPos);
+	SubwayBranch * _branch = new SubwayBranch(_branchName, _maxStations);
+	m_Branches.push_back(_branch);
+}
+
+void Undeground::removeBranch(const std::string & _branchName)
+{
+	int _branchPos = findBranch(_branchName);
+	wasBranchNotAdded(_branchPos);
+	m_Branches[_branchPos]->IsStationsAdded();
+	m_Branches.erase(m_Branches.begin() + _branchPos);
+}
+
+void Undeground::removeBranch(const SubwayBranch & _branch)
+{
+	int _branchPos = findBranch(_branch);
+	wasBranchNotAdded(_branchPos);
+	m_Branches[_branchPos]->IsStationsAdded();
+	m_Branches.erase(m_Branches.begin() + _branchPos);
 }
 
 
@@ -144,16 +177,14 @@ void Undeground::addStationToBranchIntoPos(const std::string & _stationName, int
 }
 
 void Undeground::removeStation(const std::string & _stationName)
-{
+{//use find in remove or separate
 	wasBranchesNotAdded();
 	int _temp = 0;
 	for (int i = 0; i < getBranchesCount(); i++)
 	{
-		_temp = m_Branches[i]->removeStation(_stationName);
-		if (_temp == 1)
-			break;
+		if (!m_Branches[i]->removeStation(_stationName))
+		throw std::logic_error("Station didn't remove");
 	}
-	m_Branches[0]->wasStationNotAdded(_temp);
 }
 
 
