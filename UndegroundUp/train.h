@@ -1,24 +1,29 @@
 #pragma once
-#include "carriage.h"
+
 #include <vector>
 
 class Human;
+class Carriage;
 
 class Train
 {
+
 public:
-	Train(int _number);
-	Train(int _number, int _maxCarriages);
+
+	Train(int _number, int _maxCarriages = 5);
+
 	Train(const Train & _temp) = delete;
 	Train & operator =(Train & _temp) = delete;
-	~Train() {};
+
+	~Train() {}
 
 	int getNumber() const;
 	int getNCarriages() const;
-	int getHumansCount()const;
-	Carriage *getCarriage(int _pos) const;
+//	int getHumansCount()const;
 
-	int findCarriage(const Carriage &_carriage) const;
+	bool hasCarriage( Carriage const & _carriage ) const;
+	Carriage * findCarriage(  ) const;
+
 	int findCarriage(int _number) const;
 	void addCarriage(Carriage *_carriage);
 	void removeCarriage(int _number);

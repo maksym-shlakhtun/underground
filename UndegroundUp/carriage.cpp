@@ -24,70 +24,60 @@ int Carriage::getHumansCount() const
 	return m_passengers.size();
 }
 
-int Carriage::getCarriageNumber()
+int Carriage::getCarriageNumber() const
 {
 	return m_Number;
 }
 
-Human * Carriage::getHuman(const std::string & _humanName) const
+Human const * Carriage::findHuman(const std::string & _humanName) const
 {
-	int _humanPos = findHuman(_humanName);
-	if (_humanPos == -1)
-		return nullptr;
-	return m_passengers[_humanPos];
+	m_passengers.count( &_humanName );
+
+	return nullptr;
 }
 
-Human * Carriage::getHuman(int _humanPos) const
+bool Carriage::hasHuman( Human const & _passenger ) const
 {
-	return m_passengers.at(_humanPos);
+	return m_passengers.find( &_passenger.getName() ) != m_passengers.end();
 }
 
-
-int Carriage::addHuman(Human * _passenger)
+bool Carriage::addHuman(Human const & _passenger)
 {
 	if (m_passengers.size() == m_Capacity)
-		return -1;
-/*	else
-		if (findHuman( _passenger) != -1)
-			throw "Human is already in the carriage";*/
+		return false;
 
-		m_passengers.push_back(_passenger);
-		return 1;
-	
+	return m_passengers.insert( std::make_pair( &_passenger.getName(), &_passenger ) ).second;
 }
 
 
-int Carriage::findHuman(const Human & _human) const
+bool Carriage::embarkHuman(Human const & _passenger)
 {
-	int nHuman = getHumansCount();
-	for (int i = 0; i < nHuman; i++)
-		if (m_passengers[i] == (&_human))
-			return i;
-	return -1;
+	if( m_passengers.count( &_passenger.getName() ) == 0)
+		return false;
+
+	m_passengers.erase( &_passenger.getName() );
+
+	return true;
 }
 
-int Carriage::findHuman(const std::string &_humanName) const
+bool Carriage::isFull() const
 {
-	int nHuman = getHumansCount();
-	for (int i = 0; i < nHuman; i++)
-		if (m_passengers[i]->getName()== _humanName)
-			return i;
-	return -1;
+	return (getHumansCount() == m_Capacity);
 }
 
-Human * Carriage::getAndRemoveHuman(int _humanPos)
-{
-	Human * _human = getHuman(_humanPos);
-	m_passengers.erase(m_passengers.begin() + _humanPos);
-	return _human;
-}
-
-bool Carriage::Follness() const
-{
-	return (getHumansCount() + 1 < m_Capacity);
-}
-
-int  Carriage::nEmptySeats() const
+int Carriage::emptySeatsCount() const
 {
 	return m_Capacity - getHumansCount();
+}
+
+Carriage::PassengersIterator
+Carriage::passengersBegin() const
+{
+	return m_passengers.cbegin();
+}
+
+Carriage::PassengersIterator
+Carriage::passengersEnd() const
+{
+	return m_passengers.cend();
 }

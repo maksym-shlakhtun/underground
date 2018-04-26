@@ -11,7 +11,7 @@ public:
 	Human(const Human & _human) = delete;
 	Human operator = (const Human & _human) = delete;
 	
-	std::string const & getName();
+	std::string const & getName() const;
 
 private:
 	std::string const  m_Name;

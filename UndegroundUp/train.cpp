@@ -3,12 +3,6 @@
 #include "carriage.h"
 
 
-Train::Train(int _number)
-	:m_maxCarriages(5), m_Number(_number)
-{
-	incorrectNumber(_number);
-}
-
 Train::Train(int _number, int _maxCarriages)
 	: m_maxCarriages(_maxCarriages), m_Number(_number)
 {

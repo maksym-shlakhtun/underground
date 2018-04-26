@@ -1,41 +1,67 @@
 #pragma once
-#include <vector> 
+
+#include <unordered_map> 
 #include <string>
 
 class Human;
 
 class Carriage
 {
+
+private:
+
+	class PointerToStringComparator
+	{
+	public:
+
+		bool operator () (std::string const * _lhs, std::string const * _rhs) const
+		{
+			return *_lhs == *_rhs;
+		}
+	};
+
+	typedef
+		std::unordered_map<
+				std::string const *
+			,	Human const *
+			,	std::hash< std::string const * >
+			,	PointerToStringComparator
+		>
+		HumanContainer;
+
 public:
 
-	Carriage(int _number, int _capacity=10);
+	typedef HumanContainer::const_iterator PassengersIterator;
+
+	Carriage(int _number, int _capacity = 10 );
+
 	Carriage(const Carriage &) = delete;
 	Carriage & operator = (const Carriage & _temp) = delete;
 	~Carriage() {}
 
 	int getCapacity() const;
 	int getHumansCount() const;
-	int getCarriageNumber();
-	Human * getHuman(const std::string &_humanName) const;
-	Human * getHuman(int _humanPos) const;
+	int getCarriageNumber() const;
 
-	int addHuman (Human *_passenger);
-	Human * getAndRemoveHuman (int _humanPos);
-	int findHuman(const Human & _human) const;
-	int findHuman(const std::string &_humanName) const;
-	
-	bool Follness() const;
-	int  nEmptySeats() const;
+	bool addHuman(Human const & _passenger);
+	bool embarkHuman(Human const & _passenger);
 
+	Human const * findHuman(const std::string &_humanName) const;
+	bool hasHuman ( Human const & _human) const;
+
+	PassengersIterator passengersBegin () const;
+	PassengersIterator passengersEnd () const;
+
+	bool isFull() const;
+	int emptySeatsCount() const;
 
 private:
 	int m_Capacity;
-	std::vector <Human *> m_passengers;
+	HumanContainer m_passengers;
 	int m_Number;
 	
 	void validCapacity(int _temp) const;
 	void isHumanInCarriage(int _humanPos) const;
-
 };
 
 inline void Carriage::validCapacity(int _temp) const

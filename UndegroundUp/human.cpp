@@ -1,11 +1,11 @@
+#include "Human.h"
 
 #include <string>
-#include "Human.h"
 
 Human::Human(std::string const & _Name)
 	:m_Name(_Name) {}
 
-std::string const & Human::getName()
+std::string const & Human::getName() const
 {
 	return m_Name;
 }
